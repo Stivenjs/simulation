@@ -19,13 +19,12 @@ Makefile
 !CMakeLists.txt
 
 # IDE
-# .vscode/ - Mantenemos la configuración de VSCode/Cursor para el proyecto
+# .vscode/ 
 .idea/
 *.swp
 *.swo
 *~
 
-# Archivos temporales de VSCode que sí queremos ignorar
 .vscode/*.log
 .vscode/settings.local.json
 
