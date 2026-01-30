@@ -6,7 +6,7 @@ Motor de simulación discreta en C++20 que modela un universo simplificado basad
 
 ```bash
 # 1. Clonar el repositorio
-git clone <url-del-repo>
+git clone https://github.com/Stivenjs/simulation.git
 cd simulation
 
 # 2. Compilar (Windows con MinGW)
@@ -18,8 +18,8 @@ cmake -B build -S .
 cmake --build build
 
 # 3. Ejecutar
-./build/simulacion.exe  # Windows
-./build/simulacion      # Linux/macOS
+./build/simulation.exe  # Windows
+./build/simulation      # Linux/macOS
 ```
 
 ## Características
@@ -115,13 +115,13 @@ cmake --build build
 #### Windows
 
 ```bash
-./build/simulacion.exe
+./build/simulation.exe
 ```
 
 #### Linux/macOS
 
 ```bash
-./build/simulacion
+./build/simulation
 ```
 
 ### Compilación con Flags Estrictos
@@ -145,4 +145,4 @@ cmake --build build
 
 ## Licencia
 
-MIT
+Este proyecto está licenciado bajo la Licencia MIT. Consulta el archivo [LICENSE](LICENSE) para más detalles.
