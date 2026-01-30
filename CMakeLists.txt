@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(SimulacionUniverso VERSION 1.0.0 LANGUAGES CXX)
+project(DiscreteUniverseSimulation VERSION 1.0.0 LANGUAGES CXX)
 
 # Configuración de C++20
 set(CMAKE_CXX_STANDARD 20)
@@ -13,4 +13,4 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Ejecutable principal
-add_executable(simulacion main.cpp)
+add_executable(simulation main.cpp)
