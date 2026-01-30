@@ -5,7 +5,7 @@
       "name": "(gdb) Launch",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
+      "program": "${command:cmake.launchTargetPath}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
@@ -26,21 +26,6 @@
         }
       ],
       "preLaunchTask": "CMake: Build"
-    },
-    {
-      "name": "(gdb) Attach",
-      "type": "cppdbg",
-      "request": "attach",
-      "program": "${workspaceFolder}/build/${fileBasenameNoExtension}.exe",
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb.exe",
-      "setupCommands": [
-        {
-          "description": "Habilitar impresión con formato para gdb",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
     }
   ]
 }

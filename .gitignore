@@ -2,6 +2,8 @@
 build/
 cmake-build-*/
 out/
+.cmake/
+.cache/
 
 # Compiled files
 *.o
