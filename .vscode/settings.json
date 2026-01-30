@@ -1,0 +1,55 @@
+{
+  "C_Cpp.default.cppStandard": "c++20",
+  "C_Cpp.default.cStandard": "c17",
+
+  "clangd.arguments": [
+    "--compile-commands-dir=${workspaceFolder}/build",
+    "--background-index",
+    "--clang-tidy",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+    "--pch-storage=memory"
+  ],
+  "clangd.fallbackFlags": ["-std=c++20"],
+
+  "editor.formatOnSave": true,
+  "editor.formatOnType": false,
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "[c]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+
+  "cmake.configureOnOpen": true,
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "cmake.generator": "Unix Makefiles",
+
+  "files.associations": {
+    "*.h": "cpp",
+    "*.hpp": "cpp",
+    "*.cpp": "cpp",
+    "*.tpp": "cpp",
+    "*.ipp": "cpp"
+  },
+
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "off",
+  "editor.minimap.enabled": false,
+  "editor.overviewRulerBorder": false,
+
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+
+  "files.exclude": {
+    "**/.git": true,
+    "**/build": true,
+    "**/*.o": true,
+    "**/*.obj": true
+  },
+  "search.exclude": {
+    "**/build": true,
+    "**/*.o": true,
+    "**/*.obj": true
+  }
+}

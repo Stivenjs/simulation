@@ -1,0 +1,82 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: Configure",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["-B", "build", "-S", ".", "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"],
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "problemMatcher": [],
+      "detail": "Configurar proyecto con CMake"
+    },
+    {
+      "label": "CMake: Build",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": ["CMake: Configure"],
+      "detail": "Compilar proyecto con CMake"
+    },
+    {
+      "label": "CMake: Build (Strict)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-B",
+        "build",
+        "-S",
+        ".",
+        "-DCMAKE_CXX_FLAGS=-Wall -Wextra -Wpedantic -Werror",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "&&",
+        "cmake",
+        "--build",
+        "build"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"],
+      "detail": "Compilar con flags estrictos (-Wall -Wextra -Wpedantic -Werror)"
+    },
+    {
+      "label": "CMake: Clean",
+      "type": "shell",
+      "command": "cmake",
+      "args": ["--build", "build", "--target", "clean"],
+      "group": "build",
+      "problemMatcher": [],
+      "detail": "Limpiar archivos compilados"
+    },
+    {
+      "label": "CMake: Rebuild",
+      "type": "shell",
+      "command": "rm",
+      "args": [
+        "-rf",
+        "build",
+        "&&",
+        "cmake",
+        "-B",
+        "build",
+        "-S",
+        ".",
+        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+        "&&",
+        "cmake",
+        "--build",
+        "build"
+      ],
+      "group": "build",
+      "problemMatcher": ["$gcc"],
+      "detail": "Limpiar y recompilar desde cero"
+    }
+  ]
+}
