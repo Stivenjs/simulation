@@ -12,6 +12,7 @@
 #include "core/Simulator.hpp"
 #include "core/Stats.hpp"
 #include "core/Grid2D.hpp"
+#include "engine/Window.hpp"
 
 namespace Renderer {
 
@@ -56,9 +57,20 @@ class UI {
   void renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
                         Core::Grid2D& grid);
 
+  /**
+   * @brief Renderiza panel de configuración de video
+   * @param window Referencia a la ventana
+   */
+  void renderVideoSettingsPanel(Engine::Window& window);
+
  private:
   bool showStatsWindow;
   bool showControlsWindow;
+  bool showVideoSettingsWindow;
+
+  // Estado del selector de resolución
+  int selectedResolutionIndex;
+  int selectedDisplayModeIndex;
 };
 
 }  // namespace Renderer

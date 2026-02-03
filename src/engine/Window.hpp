@@ -11,6 +11,7 @@
 
 #include <GLFW/glfw3.h>
 #include <string>
+#include <vector>
 
 namespace Engine {
 
@@ -83,11 +84,72 @@ class Window {
    */
   void setCursorCaptured(bool captured);
 
+  /**
+   * @brief Modos de pantalla disponibles
+   */
+  enum class DisplayMode { Windowed, Fullscreen, BorderlessFullscreen };
+
+  /**
+   * @brief Estructura para resoluciones de video
+   */
+  struct Resolution {
+    int width;
+    int height;
+
+    bool operator==(const Resolution& other) const {
+      return width == other.width && height == other.height;
+    }
+  };
+
+  /**
+   * @brief Obtiene el modo de pantalla actual
+   * @return Modo de pantalla actual
+   */
+  DisplayMode getDisplayMode() const {
+    return displayMode;
+  }
+
+  /**
+   * @brief Obtiene las resoluciones disponibles del monitor
+   * @return Vector de resoluciones disponibles
+   */
+  std::vector<Resolution> getAvailableResolutions() const;
+
+  /**
+   * @brief Cambia la resolución y modo de pantalla
+   * @param width Nuevo ancho
+   * @param height Nuevo alto
+   * @param mode Modo de pantalla
+   */
+  void setDisplayMode(int width, int height, DisplayMode mode);
+
+  /**
+   * @brief Aplica pantalla completa
+   */
+  void setFullscreen();
+
+  /**
+   * @brief Aplica pantalla completa sin bordes
+   */
+  void setBorderlessFullscreen();
+
+  /**
+   * @brief Aplica modo ventana
+   */
+  void setWindowed();
+
  private:
   GLFWwindow* window;
   int width;
   int height;
   std::string title;
+  DisplayMode displayMode;
+
+  // Para recordar el tamaño/posición en modo ventana
+  int windowedWidth;
+  int windowedHeight;
+  int windowedPosX;
+  int windowedPosY;
 
   /**
    * @brief Inicializa GLFW y crea la ventana

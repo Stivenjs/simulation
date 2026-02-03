@@ -7,6 +7,8 @@
 #include "Grid2D.hpp"
 #include "Simulator.hpp"
 #include <glm/glm.hpp>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
 
 namespace Core {
 
@@ -30,10 +32,17 @@ InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera,
 }
 
 void InputManager::processKeyboard(float deltaTime) {
-  // ESC para cerrar
+  // ImGui verifica si quiere capturar el teclado
+  ImGuiIO& io = ImGui::GetIO();
+
+  // ESC para cerrar (siempre procesado)
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
   }
+
+  // Si ImGui quiere capturar el teclado, no procesar el resto de teclas
+  if (io.WantCaptureKeyboard)
+    return;
 
   // SPACE para pausar/reanudar (evitar spam con static)
   static bool spacePressed = false;
@@ -101,7 +110,13 @@ bool InputManager::shouldClose() const {
 }
 
 void InputManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-  (void)window;
+  // Pasar el evento a ImGui primero
+  ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
+
+  // Si ImGui quiere capturar el mouse, no procesar
+  ImGuiIO& io = ImGui::GetIO();
+  if (io.WantCaptureMouse)
+    return;
 
   if (!instance || !instance->mousePressed)
     return;
@@ -123,8 +138,15 @@ void InputManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
 
 void InputManager::mouseButtonCallback(GLFWwindow* window, int button,
                                        int action, int mods) {
-  (void)window;
-  (void)mods;
+  // Pasar el evento a ImGui primero
+  ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+
+  // Si ImGui quiere capturar el mouse, no procesar
+  ImGuiIO& io = ImGui::GetIO();
+
+  if (io.WantCaptureMouse) {
+    return;
+  }
 
   if (!instance)
     return;
@@ -141,8 +163,13 @@ void InputManager::mouseButtonCallback(GLFWwindow* window, int button,
 
 void InputManager::scrollCallback(GLFWwindow* window, double xoffset,
                                   double yoffset) {
-  (void)window;
-  (void)xoffset;
+  // Pasar el evento a ImGui primero
+  ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+
+  // Si ImGui quiere capturar el mouse, no procesar
+  ImGuiIO& io = ImGui::GetIO();
+  if (io.WantCaptureMouse)
+    return;
 
   if (instance) {
     instance->camera.processMouseScroll(yoffset);

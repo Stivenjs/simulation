@@ -112,9 +112,12 @@ void Application::render() {
   // Matriz de vista desde la cámara
   glm::mat4 view = camera->getViewMatrix();
 
-  // Matriz de proyección
+  // Matriz de proyección (usar tamaño actual de la ventana)
+  int currentWidth = window->getWidth();
+  int currentHeight = window->getHeight();
   glm::mat4 projection = glm::perspective(
-      glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+      glm::radians(45.0f), (float)currentWidth / (float)currentHeight, 0.1f,
+      100.0f);
 
   shader->setMat4("view", glm::value_ptr(view));
   shader->setMat4("projection", glm::value_ptr(projection));
@@ -151,6 +154,7 @@ void Application::render() {
   // Renderizar UI (debe ser después de la escena 3D)
   ui->newFrame();
   ui->renderStatsPanel(*simulator, *stats, *grid);
+  ui->renderVideoSettingsPanel(*window);
   ui->render();
 }
 

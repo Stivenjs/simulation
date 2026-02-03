@@ -11,7 +11,15 @@
 namespace Engine {
 
 Window::Window(int width, int height, const std::string& title)
-    : window(nullptr), width(width), height(height), title(title) {
+    : window(nullptr),
+      width(width),
+      height(height),
+      title(title),
+      displayMode(DisplayMode::Windowed),
+      windowedWidth(width),
+      windowedHeight(height),
+      windowedPosX(100),
+      windowedPosY(100) {
   init();
 }
 
@@ -93,6 +101,90 @@ void Window::setCursorCaptured(bool captured) {
   } else {
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   }
+}
+
+std::vector<Window::Resolution> Window::getAvailableResolutions() const {
+  std::vector<Resolution> resolutions;
+
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+  if (!monitor) {
+    return resolutions;
+  }
+
+  int count;
+  const GLFWvidmode* modes = glfwGetVideoModes(monitor, &count);
+
+  // Agregar resoluciones únicas
+  for (int i = 0; i < count; i++) {
+    Resolution res{modes[i].width, modes[i].height};
+
+    // Evitar duplicados
+    bool exists = false;
+    for (const auto& existing : resolutions) {
+      if (existing == res) {
+        exists = true;
+        break;
+      }
+    }
+
+    if (!exists) {
+      resolutions.push_back(res);
+    }
+  }
+
+  return resolutions;
+}
+
+void Window::setDisplayMode(int newWidth, int newHeight, DisplayMode mode) {
+  width = newWidth;
+  height = newHeight;
+  displayMode = mode;
+
+  GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+
+  switch (mode) {
+    case DisplayMode::Fullscreen:
+      glfwSetWindowMonitor(window, monitor, 0, 0, width, height,
+                           GLFW_DONT_CARE);
+      break;
+
+    case DisplayMode::BorderlessFullscreen: {
+      const GLFWvidmode* videoMode = glfwGetVideoMode(monitor);
+      glfwSetWindowMonitor(window, monitor, 0, 0, videoMode->width,
+                           videoMode->height, videoMode->refreshRate);
+      width = videoMode->width;
+      height = videoMode->height;
+      break;
+    }
+
+    case DisplayMode::Windowed:
+      // Guardar posición actual si estamos en fullscreen
+      if (displayMode != DisplayMode::Windowed) {
+        windowedPosX = 100;
+        windowedPosY = 100;
+      }
+
+      glfwSetWindowMonitor(window, nullptr, windowedPosX, windowedPosY, width,
+                           height, GLFW_DONT_CARE);
+      windowedWidth = width;
+      windowedHeight = height;
+      break;
+  }
+
+  // Actualizar viewport
+  glViewport(0, 0, width, height);
+}
+
+void Window::setFullscreen() {
+  setDisplayMode(width, height, DisplayMode::Fullscreen);
+}
+
+void Window::setBorderlessFullscreen() {
+  setDisplayMode(width, height, DisplayMode::BorderlessFullscreen);
+}
+
+void Window::setWindowed() {
+  setDisplayMode(windowedWidth, windowedHeight, DisplayMode::Windowed);
 }
 
 }  // namespace Engine
