@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# FetchContent para descargar dependencias automáticamente
+include(FetchContent)
+
 # Flags de compilación estrictos
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 
@@ -24,6 +27,26 @@ pkg_check_modules(GLFW REQUIRED glfw3)
 # Buscar GLEW usando pkg-config
 pkg_check_modules(GLEW REQUIRED glew)
 
+# Descargar ImGui con FetchContent
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.92.0
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+# Archivos de ImGui que se necesitan
+set(IMGUI_DIR ${imgui_SOURCE_DIR})
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
 # GLM es solo headers, no necesita linking
 set(GLM_INCLUDE_DIR "")
 
@@ -33,6 +56,8 @@ include_directories(
     ${OPENGL_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
 )
 
 # Directorios de librerías
@@ -54,6 +79,8 @@ set(SOURCES
     src/renderer/Shader.cpp
     src/renderer/Camera.cpp
     src/renderer/Mesh.cpp
+    src/renderer/UI.cpp
+    ${IMGUI_SOURCES}
 )
 
 # Ejecutable principal
@@ -61,7 +88,6 @@ add_executable(simulation ${SOURCES})
 
 # Linkear librerías
 target_link_libraries(simulation
-    ${OPENGL_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${GLEW_LIBRARIES}
 )

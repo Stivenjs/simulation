@@ -67,9 +67,11 @@ cmake --build build
   ```bash
   # Debian/Ubuntu
   sudo apt install libglfw3-dev libglew-dev libglm-dev
-
+  
   # Fedora
   sudo dnf install glfw-devel glew-devel glm-devel
+  
+  # Nota: ImGui se descarga automáticamente con CMake FetchContent
   ```
 
 #### macOS

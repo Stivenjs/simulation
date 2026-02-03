@@ -34,6 +34,9 @@ void Application::init() {
   // Crear cámara
   camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 2.0f, 5.0f));
 
+  // Crear UI (después de crear ventana)
+  ui = std::make_unique<Renderer::UI>(window->getHandle());
+
   // Nota: InputManager se crea después del grid y simulator
 
   // Crear grid de simulación (20x20)
@@ -144,6 +147,11 @@ void Application::render() {
   }
 
   shader->unuse();
+
+  // Renderizar UI (debe ser después de la escena 3D)
+  ui->newFrame();
+  ui->renderStatsPanel(*simulator, *stats, *grid);
+  ui->render();
 }
 
 void Application::calculateDeltaTime() {
