@@ -7,7 +7,7 @@
     "--background-index",
     "--clang-tidy",
     "--completion-style=detailed",
-    "--header-insertion=iwyu",
+    "--header-insertion=never",
     "--pch-storage=memory"
   ],
   "clangd.fallbackFlags": ["-std=c++20"],

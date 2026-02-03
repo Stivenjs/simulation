@@ -1,0 +1,15 @@
+# Configuración de clang-format para el proyecto
+# Evita reordenar includes que tienen dependencias de orden
+
+BasedOnStyle: Google
+IndentWidth: 2
+ColumnLimit: 80
+
+SortIncludes: Never
+
+# Otras configuraciones
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AlwaysBreakAfterReturnType: None
+PointerAlignment: Left
+DerivePointerAlignment: false
