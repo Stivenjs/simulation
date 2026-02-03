@@ -1,6 +1,6 @@
-# Motor de Simulación de Universo Discreto
+# Motor de Simulación 3D con Renderizado
 
-Motor de simulación discreta en C++20 que modela un universo simplificado basado en reglas locales deterministas.
+Motor híbrido en C++20 que combina simulación de universo discreto con renderizado 3D en tiempo real usando OpenGL. Modela un universo simplificado basado en reglas locales deterministas y lo visualiza en 3D.
 
 ## Inicio Rápido
 
@@ -24,10 +24,12 @@ cmake --build build
 
 ## Características
 
-- **Grilla 2D discreta** con estados configurables por celda
+- **Simulación discreta 3D** con estados configurables por celda
+- **Renderizado 3D en tiempo real** con OpenGL 3.3+
 - **Evolución determinista** basada en reglas locales (autómatas celulares)
-- **Arquitectura modular** preparada para extensión a 3D
+- **Arquitectura modular** con separación entre simulación y renderizado
 - **C++20 moderno** con verificación estricta de lints
+- **Multiplataforma** (Windows, Linux, macOS)
 
 ## Requisitos
 
@@ -42,6 +44,9 @@ cmake --build build
   pacman -S mingw-w64-ucrt-x86_64-gcc
   pacman -S mingw-w64-ucrt-x86_64-gdb
   pacman -S mingw-w64-ucrt-x86_64-make
+  pacman -S mingw-w64-ucrt-x86_64-glfw
+  pacman -S mingw-w64-ucrt-x86_64-glew
+  pacman -S mingw-w64-ucrt-x86_64-glm
   ```
   - Agregar `C:\msys64\ucrt64\bin` al PATH del sistema
 
@@ -57,9 +62,14 @@ cmake --build build
   sudo apt install build-essential  # Debian/Ubuntu
   sudo dnf install gcc-c++          # Fedora
   ```
-- **GDB** (opcional, para debugging)
+- **Librerías OpenGL/GLFW**
+
   ```bash
-  sudo apt install gdb
+  # Debian/Ubuntu
+  sudo apt install libglfw3-dev libglew-dev libglm-dev
+
+  # Fedora
+  sudo dnf install glfw-devel glew-devel glm-devel
   ```
 
 #### macOS
@@ -71,6 +81,10 @@ cmake --build build
 - **Clang** (viene con Xcode Command Line Tools)
   ```bash
   xcode-select --install
+  ```
+- **Librerías OpenGL/GLFW**
+  ```bash
+  brew install glfw glew glm
   ```
 
 ### Extensiones para Cursor/VSCode (Recomendadas)
@@ -87,10 +101,17 @@ cmake --build build
 
 - Estructura base del proyecto
 - Configuración completa del entorno de desarrollo
+- Sistema de ventana con GLFW
+- Inicialización de OpenGL 3.3+
 
 ### En desarrollo
 
-- Core: Cell y Grid con vecindario
+- Renderizado básico (triángulo, cubo)
+- Core: Cell y Grid 2D
+- Visualización de Grid 2D en 3D
+- Extensión a Grid 3D
+- Cámara orbital
+- Reglas de simulación
 
 ## Compilación
 

@@ -36,7 +36,7 @@
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.wordWrap": "off",
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": true,
   "editor.overviewRulerBorder": false,
 
   "terminal.integrated.defaultProfile.windows": "Git Bash",
