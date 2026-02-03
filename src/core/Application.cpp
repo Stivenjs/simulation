@@ -34,16 +34,33 @@ void Application::init() {
   // Crear cámara
   camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 2.0f, 5.0f));
 
-  // Crear input manager
-  inputManager = std::make_unique<InputManager>(window->getHandle(), *camera);
+  // Nota: InputManager se crea después del grid y simulator
 
-  // Crear cubo
-  meshes.push_back(Renderer::Mesh::createCube());
+  // Crear grid de simulación (20x20)
+  grid = std::make_unique<Grid2D>(20, 20);
+  grid->randomize(0.3f);  // 30% de celdas vivas
+
+  // Crear simulador
+  simulator = std::make_unique<Simulator>(*grid);
+  simulator->setSpeed(5.0f);  // 5 pasos por segundo
+
+  // Crear mesh del cubo (reutilizable para cada celda)
+  cubeMesh = Renderer::Mesh::createCube();
+
+  // Crear input manager (después de grid y simulator)
+  inputManager = std::make_unique<InputManager>(window->getHandle(), *camera,
+                                                *grid, *simulator);
 
   // Configurar OpenGL
   glEnable(GL_DEPTH_TEST);
 
+  std::cout << "\nGrid initialized: " << grid->getWidth() << "x"
+            << grid->getHeight() << std::endl;
+  std::cout << "Simulation: Game of Life (Conway)" << std::endl;
   std::cout << "\nControls:" << std::endl;
+  std::cout << "  SPACE: Pause/Resume simulation" << std::endl;
+  std::cout << "  R: Randomize grid" << std::endl;
+  std::cout << "  C: Clear grid" << std::endl;
   std::cout << "  Mouse Left Button + Drag: Rotate camera" << std::endl;
   std::cout << "  Mouse Scroll: Zoom in/out" << std::endl;
   std::cout << "  WASD: Pan camera" << std::endl;
@@ -65,6 +82,7 @@ void Application::run() {
 
 void Application::update() {
   inputManager->processKeyboard(deltaTime);
+  simulator->update(deltaTime);
 }
 
 void Application::render() {
@@ -84,10 +102,26 @@ void Application::render() {
   shader->setMat4("view", glm::value_ptr(view));
   shader->setMat4("projection", glm::value_ptr(projection));
 
-  // Renderizar todos los meshes
-  for (const auto& mesh : meshes) {
-    shader->setMat4("model", glm::value_ptr(mesh->getModelMatrix()));
-    mesh->draw();
+  // Renderizar grid - un cubo por cada celda
+  float spacing = 1.2f;  // Espacio entre cubos
+  float gridOffsetX = -(grid->getWidth() * spacing) / 2.0f;
+  float gridOffsetZ = -(grid->getHeight() * spacing) / 2.0f;
+
+  for (int y = 0; y < grid->getHeight(); ++y) {
+    for (int x = 0; x < grid->getWidth(); ++x) {
+      CellState state = grid->getCell(x, y);
+
+      // Solo renderizar celdas vivas
+      if (state == CellState::ALIVE) {
+        glm::mat4 model = glm::mat4(1.0f);
+        model = glm::translate(model, glm::vec3(gridOffsetX + x * spacing, 0.0f,
+                                                gridOffsetZ + y * spacing));
+        model = glm::scale(model, glm::vec3(0.5f));  // Cubos más pequeños
+
+        shader->setMat4("model", glm::value_ptr(model));
+        cubeMesh->draw();
+      }
+    }
   }
 
   shader->unuse();

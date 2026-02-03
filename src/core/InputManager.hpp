@@ -8,6 +8,8 @@
 #define INPUT_MANAGER_HPP
 
 #include <GLFW/glfw3.h>
+#include "Grid2D.hpp"
+#include "Simulator.hpp"
 #include "renderer/Camera.hpp"
 
 namespace Core {
@@ -22,8 +24,11 @@ class InputManager {
    * @brief Constructor
    * @param window Puntero a la ventana GLFW
    * @param camera Referencia a la cámara
+   * @param grid Referencia al grid de simulación
+   * @param simulator Referencia al simulador
    */
-  InputManager(GLFWwindow* window, Renderer::Camera& camera);
+  InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid,
+               Simulator& simulator);
 
   /**
    * @brief Procesa input del teclado
@@ -40,6 +45,8 @@ class InputManager {
  private:
   GLFWwindow* window;
   Renderer::Camera& camera;
+  Grid2D& grid;
+  Simulator& simulator;
 
   // Estado del mouse
   float lastX, lastY;

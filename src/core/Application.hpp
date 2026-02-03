@@ -8,13 +8,14 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
-#include "renderer/Mesh.hpp"
-#include "core/InputManager.hpp"
+#include "renderer/Shader.hpp"
 #include "engine/Window.hpp"
 #include "renderer/Camera.hpp"
-#include "renderer/Shader.hpp"
+#include "renderer/Mesh.hpp"
+#include "core/InputManager.hpp"
+#include "core/Grid2D.hpp"
+#include "core/Simulator.hpp"
 #include <memory>
-#include <vector>
 
 namespace Core {
 
@@ -53,7 +54,11 @@ class Application {
   std::unique_ptr<Renderer::Shader> shader;
   std::unique_ptr<Renderer::Camera> camera;
   std::unique_ptr<InputManager> inputManager;
-  std::vector<std::unique_ptr<Renderer::Mesh>> meshes;
+
+  // Simulación
+  std::unique_ptr<Grid2D> grid;
+  std::unique_ptr<Simulator> simulator;
+  std::unique_ptr<Renderer::Mesh> cubeMesh;
 
   // Configuración
   int width, height;

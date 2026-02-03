@@ -4,15 +4,20 @@
  */
 
 #include "InputManager.hpp"
+#include "Grid2D.hpp"
+#include "Simulator.hpp"
 #include <glm/glm.hpp>
 
 namespace Core {
 
 InputManager* InputManager::instance = nullptr;
 
-InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera)
+InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera,
+                           Grid2D& grid, Simulator& simulator)
     : window(window),
       camera(camera),
+      grid(grid),
+      simulator(simulator),
       lastX(400.0f),
       lastY(300.0f),
       firstMouse(true),
@@ -28,6 +33,36 @@ void InputManager::processKeyboard(float deltaTime) {
   // ESC para cerrar
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
+  }
+
+  // SPACE para pausar/reanudar (evitar spam con static)
+  static bool spacePressed = false;
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS && !spacePressed) {
+    simulator.togglePause();
+    spacePressed = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE) {
+    spacePressed = false;
+  }
+
+  // R para randomizar
+  static bool rPressed = false;
+  if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS && !rPressed) {
+    grid.randomize(0.3f);
+    rPressed = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE) {
+    rPressed = false;
+  }
+
+  // C para limpiar
+  static bool cPressed = false;
+  if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS && !cPressed) {
+    grid.clear();
+    cPressed = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_C) == GLFW_RELEASE) {
+    cPressed = false;
   }
 
   // WASD para pan

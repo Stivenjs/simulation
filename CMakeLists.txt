@@ -46,6 +46,8 @@ set(SOURCES
     src/main.cpp
     src/core/Application.cpp
     src/core/InputManager.cpp
+    src/core/Grid2D.cpp
+    src/core/Simulator.cpp
     src/engine/Window.cpp
     src/renderer/Shader.cpp
     src/renderer/Camera.cpp

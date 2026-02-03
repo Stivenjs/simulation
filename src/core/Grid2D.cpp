@@ -1,0 +1,75 @@
+/**
+ * @file Grid2D.cpp
+ * @brief Implementación de Grid2D
+ */
+
+#include "Grid2D.hpp"
+#include <random>
+#include <algorithm>
+
+namespace Core {
+
+Grid2D::Grid2D(int width, int height)
+    : width(width), height(height), cells(width * height, CellState::DEAD) {}
+
+CellState Grid2D::getCell(int x, int y) const {
+  if (!isValid(x, y))
+    return CellState::DEAD;
+  return cells[getIndex(x, y)];
+}
+
+void Grid2D::setCell(int x, int y, CellState state) {
+  if (isValid(x, y)) {
+    cells[getIndex(x, y)] = state;
+  }
+}
+
+void Grid2D::clear() {
+  std::fill(cells.begin(), cells.end(), CellState::DEAD);
+}
+
+void Grid2D::randomize(float probability) {
+  static std::random_device rd;
+  static std::mt19937 gen(rd());
+  std::uniform_real_distribution<> dis(0.0, 1.0);
+
+  for (int y = 0; y < height; ++y) {
+    for (int x = 0; x < width; ++x) {
+      CellState state =
+          (dis(gen) < probability) ? CellState::ALIVE : CellState::DEAD;
+      setCell(x, y, state);
+    }
+  }
+}
+
+int Grid2D::countAliveNeighbors(int x, int y) const {
+  int count = 0;
+
+  // Vecindario de Moore (8 vecinos)
+  for (int dy = -1; dy <= 1; ++dy) {
+    for (int dx = -1; dx <= 1; ++dx) {
+      // Saltar la celda central
+      if (dx == 0 && dy == 0)
+        continue;
+
+      int nx = x + dx;
+      int ny = y + dy;
+
+      if (isValid(nx, ny) && getCell(nx, ny) == CellState::ALIVE) {
+        count++;
+      }
+    }
+  }
+
+  return count;
+}
+
+int Grid2D::getIndex(int x, int y) const {
+  return y * width + x;
+}
+
+bool Grid2D::isValid(int x, int y) const {
+  return x >= 0 && x < width && y >= 0 && y < height;
+}
+
+}  // namespace Core
