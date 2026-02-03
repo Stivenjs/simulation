@@ -26,66 +26,66 @@ namespace Core {
  * @brief Coordina el motor: ventana, renderizado, input, simulación
  */
 class Application {
- public:
-  /**
-   * @brief Constructor
-   * @param width Ancho de la ventana
-   * @param height Alto de la ventana
-   * @param title Título de la ventana
-   */
-  Application(int width, int height, const std::string& title);
+   public:
+    /**
+     * @brief Constructor
+     * @param width Ancho de la ventana
+     * @param height Alto de la ventana
+     * @param title Título de la ventana
+     */
+    Application(int width, int height, const std::string& title);
 
-  /**
-   * @brief Destructor
-   */
-  ~Application() = default;
+    /**
+     * @brief Destructor
+     */
+    ~Application() = default;
 
-  /**
-   * @brief Inicializa la aplicación
-   */
-  void init();
+    /**
+     * @brief Inicializa la aplicación
+     */
+    void init();
 
-  /**
-   * @brief Ejecuta el loop principal
-   */
-  void run();
+    /**
+     * @brief Ejecuta el loop principal
+     */
+    void run();
 
- private:
-  // Componentes principales
-  std::unique_ptr<Engine::Window> window;
-  std::unique_ptr<Renderer::Shader> shader;
-  std::unique_ptr<Renderer::Camera> camera;
-  std::unique_ptr<Renderer::UI> ui;
-  std::unique_ptr<InputManager> inputManager;
+   private:
+    // Componentes principales
+    std::unique_ptr<Engine::Window> window;
+    std::unique_ptr<Renderer::Shader> shader;
+    std::unique_ptr<Renderer::Camera> camera;
+    std::unique_ptr<Renderer::UI> ui;
+    std::unique_ptr<InputManager> inputManager;
 
-  // Simulación
-  std::unique_ptr<Grid2D> grid;
-  std::unique_ptr<Simulator> simulator;
-  std::unique_ptr<Stats> stats;
-  std::unique_ptr<Renderer::Mesh> cubeMesh;
+    // Simulación
+    std::unique_ptr<Grid2D> grid;
+    std::unique_ptr<Simulator> simulator;
+    std::unique_ptr<Stats> stats;
+    std::unique_ptr<Renderer::Mesh> cubeMesh;
 
-  // Configuración
-  int width, height;
-  std::string title;
+    // Configuración
+    int width, height;
+    std::string title;
 
-  // Tiempo
-  float lastFrame;
-  float deltaTime;
+    // Tiempo
+    float lastFrame;
+    float deltaTime;
 
-  /**
-   * @brief Actualiza la lógica del juego/simulación
-   */
-  void update();
+    /**
+     * @brief Actualiza la lógica del juego/simulación
+     */
+    void update();
 
-  /**
-   * @brief Renderiza la escena
-   */
-  void render();
+    /**
+     * @brief Renderiza la escena
+     */
+    void render();
 
-  /**
-   * @brief Calcula delta time
-   */
-  void calculateDeltaTime();
+    /**
+     * @brief Calcula delta time
+     */
+    void calculateDeltaTime();
 };
 
 }  // namespace Core

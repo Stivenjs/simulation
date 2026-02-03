@@ -9,17 +9,17 @@
 #include <iostream>
 
 int main() {
-  try {
-    Core::Application app(800, 600, "3D Universe Simulation");
+    try {
+        Core::Application app(800, 600, "3D Universe Simulation");
 
-    app.init();
+        app.init();
 
-    app.run();
+        app.run();
 
-  } catch (const std::exception& e) {
-    std::cerr << "Error: " << e.what() << std::endl;
-    return 1;
-  }
+    } catch (const std::exception& e) {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
 
-  return 0;
+    return 0;
 }

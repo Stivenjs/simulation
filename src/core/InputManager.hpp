@@ -19,49 +19,49 @@ namespace Core {
  * @brief Maneja todos los eventos de input
  */
 class InputManager {
- public:
-  /**
-   * @brief Constructor
-   * @param window Puntero a la ventana GLFW
-   * @param camera Referencia a la cámara
-   * @param grid Referencia al grid de simulación
-   * @param simulator Referencia al simulador
-   */
-  InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid,
-               Simulator& simulator);
+   public:
+    /**
+     * @brief Constructor
+     * @param window Puntero a la ventana GLFW
+     * @param camera Referencia a la cámara
+     * @param grid Referencia al grid de simulación
+     * @param simulator Referencia al simulador
+     */
+    InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid,
+                 Simulator& simulator);
 
-  /**
-   * @brief Procesa input del teclado
-   * @param deltaTime Tiempo desde el último frame
-   */
-  void processKeyboard(float deltaTime);
+    /**
+     * @brief Procesa input del teclado
+     * @param deltaTime Tiempo desde el último frame
+     */
+    void processKeyboard(float deltaTime);
 
-  /**
-   * @brief Verifica si se debe cerrar la aplicación
-   * @return true si se debe cerrar
-   */
-  bool shouldClose() const;
+    /**
+     * @brief Verifica si se debe cerrar la aplicación
+     * @return true si se debe cerrar
+     */
+    bool shouldClose() const;
 
- private:
-  GLFWwindow* window;
-  Renderer::Camera& camera;
-  Grid2D& grid;
-  Simulator& simulator;
+   private:
+    GLFWwindow* window;
+    Renderer::Camera& camera;
+    Grid2D& grid;
+    Simulator& simulator;
 
-  // Estado del mouse
-  float lastX, lastY;
-  bool firstMouse;
-  bool mousePressed;
+    // Estado del mouse
+    float lastX, lastY;
+    bool firstMouse;
+    bool mousePressed;
 
-  // Callbacks estáticos
-  static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-  static void mouseButtonCallback(GLFWwindow* window, int button, int action,
-                                  int mods);
-  static void scrollCallback(GLFWwindow* window, double xoffset,
-                             double yoffset);
+    // Callbacks estáticos
+    static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+    static void mouseButtonCallback(GLFWwindow* window, int button, int action,
+                                    int mods);
+    static void scrollCallback(GLFWwindow* window, double xoffset,
+                               double yoffset);
 
-  // Instancia global para callbacks (no ideal, pero necesario para GLFW)
-  static InputManager* instance;
+    // Instancia global para callbacks (no ideal, pero necesario para GLFW)
+    static InputManager* instance;
 };
 
 }  // namespace Core
