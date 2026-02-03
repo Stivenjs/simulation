@@ -45,6 +45,7 @@ link_directories(
 set(SOURCES
     src/main.cpp
     src/engine/Window.cpp
+    src/renderer/Shader.cpp
 )
 
 # Ejecutable principal
