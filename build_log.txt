@@ -1,0 +1,16 @@
+[  8%] Building CXX object CMakeFiles/simulation.dir/src/main.cpp.obj
+[ 16%] Building CXX object CMakeFiles/simulation.dir/src/core/Application.cpp.obj
+[ 25%] Building CXX object CMakeFiles/simulation.dir/src/core/InputManager.cpp.obj
+[ 33%] Building CXX object CMakeFiles/simulation.dir/src/core/Grid2D.cpp.obj
+[ 41%] Building CXX object CMakeFiles/simulation.dir/src/core/Simulator.cpp.obj
+[ 50%] Building CXX object CMakeFiles/simulation.dir/src/core/Rules.cpp.obj
+[ 58%] Building CXX object CMakeFiles/simulation.dir/src/core/Stats.cpp.obj
+[ 66%] Building CXX object CMakeFiles/simulation.dir/src/engine/Window.cpp.obj
+[ 75%] Building CXX object CMakeFiles/simulation.dir/src/renderer/Shader.cpp.obj
+[ 83%] Building CXX object CMakeFiles/simulation.dir/src/renderer/Camera.cpp.obj
+[ 91%] Building CXX object CMakeFiles/simulation.dir/src/renderer/Mesh.cpp.obj
+[100%] Linking CXX executable simulation.exe
+collect2.exe: error: ld returned 1 exit status
+mingw32-make[2]: *** [CMakeFiles\simulation.dir\build.make:272: simulation.exe] Error 1
+mingw32-make[1]: *** [CMakeFiles\Makefile2:86: CMakeFiles/simulation.dir/all] Error 2
+mingw32-make: *** [Makefile:90: all] Error 2

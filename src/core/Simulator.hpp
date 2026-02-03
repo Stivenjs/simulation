@@ -9,6 +9,7 @@
 #define SIMULATOR_HPP
 
 #include "Grid2D.hpp"
+#include "Rules.hpp"
 
 namespace Core {
 
@@ -61,6 +62,42 @@ class Simulator {
   }
 
   /**
+   * @brief Establece el tipo de reglas
+   * @param type Tipo de reglas a usar
+   */
+  void setRuleType(RuleType type) {
+    currentRule = type;
+  }
+
+  /**
+   * @brief Obtiene el tipo de reglas actual
+   * @return Tipo de reglas
+   */
+  RuleType getRuleType() const {
+    return currentRule;
+  }
+
+  /**
+   * @brief Cambia a la siguiente regla
+   */
+  void nextRule();
+
+  /**
+   * @brief Obtiene el número de generación actual
+   * @return Generación
+   */
+  int getGeneration() const {
+    return generation;
+  }
+
+  /**
+   * @brief Reinicia el contador de generaciones
+   */
+  void resetGeneration() {
+    generation = 0;
+  }
+
+  /**
    * @brief Actualiza el simulador (llama step() según tiempo)
    * @param deltaTime Tiempo desde el último frame
    */
@@ -71,15 +108,8 @@ class Simulator {
   bool paused;
   float updateInterval;  // Segundos entre updates
   float accumulator;     // Acumulador de tiempo
-
-  /**
-   * @brief Aplica reglas de Conway's Game of Life
-   * @param x Coordenada X
-   * @param y Coordenada Y
-   * @param neighbors Número de vecinos vivos
-   * @return Nuevo estado de la celda
-   */
-  CellState applyRules(int x, int y, int neighbors) const;
+  RuleType currentRule;  // Regla actual
+  int generation;        // Contador de generaciones
 };
 
 }  // namespace Core

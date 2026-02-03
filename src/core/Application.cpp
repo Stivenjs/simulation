@@ -44,6 +44,9 @@ void Application::init() {
   simulator = std::make_unique<Simulator>(*grid);
   simulator->setSpeed(5.0f);  // 5 pasos por segundo
 
+  // Crear estadísticas
+  stats = std::make_unique<Stats>();
+
   // Crear mesh del cubo (reutilizable para cada celda)
   cubeMesh = Renderer::Mesh::createCube();
 
@@ -61,10 +64,10 @@ void Application::init() {
   std::cout << "  SPACE: Pause/Resume simulation" << std::endl;
   std::cout << "  R: Randomize grid" << std::endl;
   std::cout << "  C: Clear grid" << std::endl;
-  std::cout << "  Mouse Left Button + Drag: Rotate camera" << std::endl;
+  std::cout << "  N: Next rule set" << std::endl;
+  std::cout << "  Mouse Left + Drag: Rotate camera" << std::endl;
   std::cout << "  Mouse Scroll: Zoom in/out" << std::endl;
-  std::cout << "  WASD: Pan camera" << std::endl;
-  std::cout << "  Q/E: Move up/down" << std::endl;
+  std::cout << "  WASD: Pan camera | Q/E: Up/Down" << std::endl;
   std::cout << "  ESC: Exit\n" << std::endl;
 }
 
@@ -83,6 +86,17 @@ void Application::run() {
 void Application::update() {
   inputManager->processKeyboard(deltaTime);
   simulator->update(deltaTime);
+  stats->update(*grid, deltaTime);
+
+  // Mostrar stats cada segundo
+  static float statsTimer = 0.0f;
+  statsTimer += deltaTime;
+  if (statsTimer >= 1.0f) {
+    std::cout << "\r" << Rules::getName(simulator->getRuleType())
+              << " | Gen: " << simulator->getGeneration() << " | "
+              << stats->toString() << "          " << std::flush;
+    statsTimer = 0.0f;
+  }
 }
 
 void Application::render() {
@@ -118,7 +132,12 @@ void Application::render() {
                                                 gridOffsetZ + y * spacing));
         model = glm::scale(model, glm::vec3(0.5f));  // Cubos más pequeños
 
+        // Obtener color dinámico basado en vecinos
+        float r, g, b;
+        grid->getCellColor(x, y, r, g, b);
+
         shader->setMat4("model", glm::value_ptr(model));
+        shader->setVec3("cellColor", r, g, b);
         cubeMesh->draw();
       }
     }

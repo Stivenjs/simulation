@@ -72,4 +72,39 @@ bool Grid2D::isValid(int x, int y) const {
   return x >= 0 && x < width && y >= 0 && y < height;
 }
 
+void Grid2D::getCellColor(int x, int y, float& r, float& g, float& b) const {
+  CellState state = getCell(x, y);
+
+  if (state == CellState::DEAD) {
+    // Células muertas muy oscuras
+    r = 0.1f;
+    g = 0.1f;
+    b = 0.15f;
+    return;
+  }
+
+  // Células vivas: color según número de vecinos
+  int neighbors = countAliveNeighbors(x, y);
+  float intensity = 0.3f + (neighbors / 8.0f) * 0.7f;  // 0.3 a 1.0
+
+  // Gradiente: azul (pocos) -> cyan -> verde -> amarillo (muchos)
+  if (neighbors <= 2) {
+    r = 0.0f;
+    g = neighbors / 2.0f * 0.5f;
+    b = intensity;
+  } else if (neighbors <= 4) {
+    r = 0.0f;
+    g = intensity;
+    b = (4.0f - neighbors) / 2.0f * intensity;
+  } else if (neighbors <= 6) {
+    r = (neighbors - 4.0f) / 2.0f * intensity;
+    g = intensity;
+    b = 0.0f;
+  } else {
+    r = intensity;
+    g = (8.0f - neighbors) / 2.0f * 0.5f;
+    b = 0.0f;
+  }
+}
+
 }  // namespace Core

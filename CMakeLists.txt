@@ -48,6 +48,8 @@ set(SOURCES
     src/core/InputManager.cpp
     src/core/Grid2D.cpp
     src/core/Simulator.cpp
+    src/core/Rules.cpp
+    src/core/Stats.cpp
     src/engine/Window.cpp
     src/renderer/Shader.cpp
     src/renderer/Camera.cpp
@@ -72,7 +74,7 @@ target_compile_options(simulation PRIVATE
 
 # Configuración específica por plataforma
 if(WIN32)
-    # Windows: Agregar librerías del sistema
+    # Windows: Librerías del sistema necesarias
     target_link_libraries(simulation
         opengl32
         gdi32

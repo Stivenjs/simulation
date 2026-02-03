@@ -8,6 +8,7 @@
 #ifndef APPLICATION_HPP
 #define APPLICATION_HPP
 
+#include "Stats.hpp"
 #include "renderer/Shader.hpp"
 #include "engine/Window.hpp"
 #include "renderer/Camera.hpp"
@@ -58,6 +59,7 @@ class Application {
   // Simulación
   std::unique_ptr<Grid2D> grid;
   std::unique_ptr<Simulator> simulator;
+  std::unique_ptr<Stats> stats;
   std::unique_ptr<Renderer::Mesh> cubeMesh;
 
   // Configuración

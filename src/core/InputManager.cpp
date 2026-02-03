@@ -65,6 +65,16 @@ void InputManager::processKeyboard(float deltaTime) {
     cPressed = false;
   }
 
+  // N para cambiar reglas
+  static bool nPressed = false;
+  if (glfwGetKey(window, GLFW_KEY_N) == GLFW_PRESS && !nPressed) {
+    simulator.nextRule();
+    nPressed = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_N) == GLFW_RELEASE) {
+    nPressed = false;
+  }
+
   // WASD para pan
   glm::vec3 movement(0.0f);
 

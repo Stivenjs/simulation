@@ -87,6 +87,14 @@ class Grid2D {
    */
   int countAliveNeighbors(int x, int y) const;
 
+  /**
+   * @brief Calcula el color de una celda basado en vecinos
+   * @param x Coordenada X
+   * @param y Coordenada Y
+   * @return Color RGB (0.0 a 1.0)
+   */
+  void getCellColor(int x, int y, float& r, float& g, float& b) const;
+
  private:
   int width;
   int height;
