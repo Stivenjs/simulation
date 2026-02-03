@@ -44,8 +44,12 @@ link_directories(
 # Archivos fuente
 set(SOURCES
     src/main.cpp
+    src/core/Application.cpp
+    src/core/InputManager.cpp
     src/engine/Window.cpp
     src/renderer/Shader.cpp
+    src/renderer/Camera.cpp
+    src/renderer/Mesh.cpp
 )
 
 # Ejecutable principal

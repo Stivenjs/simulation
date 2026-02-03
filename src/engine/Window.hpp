@@ -19,14 +19,14 @@ namespace Engine {
  * @brief Clase para gestionar la ventana de renderizado
  */
 class Window {
-public:
+ public:
   /**
    * @brief Constructor
    * @param width Ancho de la ventana en píxeles
    * @param height Alto de la ventana en píxeles
    * @param title Título de la ventana
    */
-  Window(int width, int height, const std::string &title);
+  Window(int width, int height, const std::string& title);
 
   /**
    * @brief Destructor - Limpia recursos de GLFW
@@ -34,8 +34,8 @@ public:
   ~Window();
 
   // Prevenir copia
-  Window(const Window &) = delete;
-  Window &operator=(const Window &) = delete;
+  Window(const Window&) = delete;
+  Window& operator=(const Window&) = delete;
 
   /**
    * @brief Verifica si la ventana debe cerrarse
@@ -57,22 +57,34 @@ public:
    * @brief Obtiene el puntero a la ventana GLFW
    * @return Puntero a GLFWwindow
    */
-  GLFWwindow *getHandle() const { return window; }
+  GLFWwindow* getHandle() const {
+    return window;
+  }
 
   /**
    * @brief Obtiene el ancho actual de la ventana
    * @return Ancho en píxeles
    */
-  int getWidth() const { return width; }
+  int getWidth() const {
+    return width;
+  }
 
   /**
    * @brief Obtiene el alto actual de la ventana
    * @return Alto en píxeles
    */
-  int getHeight() const { return height; }
+  int getHeight() const {
+    return height;
+  }
 
-private:
-  GLFWwindow *window;
+  /**
+   * @brief Establece si el cursor está capturado
+   * @param captured true para capturar, false para liberar
+   */
+  void setCursorCaptured(bool captured);
+
+ private:
+  GLFWwindow* window;
   int width;
   int height;
   std::string title;
@@ -85,10 +97,10 @@ private:
   /**
    * @brief Callback para manejar cambios de tamaño
    */
-  static void framebufferSizeCallback(GLFWwindow *window, int width,
+  static void framebufferSizeCallback(GLFWwindow* window, int width,
                                       int height);
 };
 
-} // namespace Engine
+}  // namespace Engine
 
-#endif // WINDOW_HPP
+#endif  // WINDOW_HPP

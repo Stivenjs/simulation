@@ -13,8 +13,8 @@
 
 namespace Renderer {
 
-Shader::Shader(const std::string &vertexSource,
-               const std::string &fragmentSource) {
+Shader::Shader(const std::string& vertexSource,
+               const std::string& fragmentSource) {
   // Compilar shaders
   GLuint vertexShader = compileShader(vertexSource, GL_VERTEX_SHADER);
   GLuint fragmentShader = compileShader(fragmentSource, GL_FRAGMENT_SHADER);
@@ -27,17 +27,17 @@ Shader::Shader(const std::string &vertexSource,
   glDeleteShader(fragmentShader);
 }
 
-Shader Shader::fromFiles(const std::string &vertexPath,
-                         const std::string &fragmentPath) {
+std::unique_ptr<Shader> Shader::fromFiles(const std::string& vertexPath,
+                                          const std::string& fragmentPath) {
   // Leer archivos
   std::string vertexSource = readFile(vertexPath);
   std::string fragmentSource = readFile(fragmentPath);
 
-  // Crear shader desde el código fuente
-  return Shader(vertexSource, fragmentSource);
+  // Crear y devolver unique_ptr al shader
+  return std::make_unique<Shader>(vertexSource, fragmentSource);
 }
 
-std::string Shader::readFile(const std::string &filepath) {
+std::string Shader::readFile(const std::string& filepath) {
   std::ifstream file(filepath);
   if (!file.is_open()) {
     throw std::runtime_error("Failed to open shader file: " + filepath);
@@ -54,13 +54,17 @@ Shader::~Shader() {
   }
 }
 
-void Shader::use() const { glUseProgram(program); }
+void Shader::use() const {
+  glUseProgram(program);
+}
 
-void Shader::unuse() const { glUseProgram(0); }
+void Shader::unuse() const {
+  glUseProgram(0);
+}
 
-GLuint Shader::compileShader(const std::string &source, GLenum type) {
+GLuint Shader::compileShader(const std::string& source, GLenum type) {
   GLuint shader = glCreateShader(type);
-  const char *src = source.c_str();
+  const char* src = source.c_str();
   glShaderSource(shader, 1, &src, nullptr);
   glCompileShader(shader);
 
@@ -81,7 +85,7 @@ void Shader::linkProgram(GLuint vertexShader, GLuint fragmentShader) {
   checkCompileErrors(program, "PROGRAM");
 }
 
-void Shader::checkCompileErrors(GLuint shader, const std::string &type) {
+void Shader::checkCompileErrors(GLuint shader, const std::string& type) {
   GLint success;
   std::vector<GLchar> infoLog(1024);
 
@@ -102,19 +106,19 @@ void Shader::checkCompileErrors(GLuint shader, const std::string &type) {
   }
 }
 
-void Shader::setFloat(const std::string &name, float value) const {
+void Shader::setFloat(const std::string& name, float value) const {
   GLint location = glGetUniformLocation(program, name.c_str());
   glUniform1f(location, value);
 }
 
-void Shader::setVec3(const std::string &name, float x, float y, float z) const {
+void Shader::setVec3(const std::string& name, float x, float y, float z) const {
   GLint location = glGetUniformLocation(program, name.c_str());
   glUniform3f(location, x, y, z);
 }
 
-void Shader::setMat4(const std::string &name, const float *matrix) const {
+void Shader::setMat4(const std::string& name, const float* matrix) const {
   GLint location = glGetUniformLocation(program, name.c_str());
   glUniformMatrix4fv(location, 1, GL_FALSE, matrix);
 }
 
-} // namespace Renderer
+}  // namespace Renderer

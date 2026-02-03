@@ -10,6 +10,7 @@
 
 #include <GL/glew.h>
 #include <string>
+#include <memory>
 
 namespace Renderer {
 
@@ -30,10 +31,10 @@ public:
    * @brief Carga shaders desde archivos
    * @param vertexPath Ruta al archivo vertex shader (.vert)
    * @param fragmentPath Ruta al archivo fragment shader (.frag)
-   * @return Shader cargado desde archivos
+   * @return unique_ptr al Shader cargado desde archivos
    */
-  static Shader fromFiles(const std::string &vertexPath,
-                          const std::string &fragmentPath);
+  static std::unique_ptr<Shader> fromFiles(const std::string &vertexPath,
+                                            const std::string &fragmentPath);
 
   /**
    * @brief Destructor - Limpia recursos OpenGL

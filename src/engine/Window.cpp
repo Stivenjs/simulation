@@ -8,10 +8,9 @@
 #include <iostream>
 #include <stdexcept>
 
-
 namespace Engine {
 
-Window::Window(int width, int height, const std::string &title)
+Window::Window(int width, int height, const std::string& title)
     : window(nullptr), width(width), height(height), title(title) {
   init();
 }
@@ -70,16 +69,30 @@ void Window::init() {
             << std::endl;
 }
 
-bool Window::shouldClose() const { return glfwWindowShouldClose(window); }
+bool Window::shouldClose() const {
+  return glfwWindowShouldClose(window);
+}
 
-void Window::pollEvents() { glfwPollEvents(); }
+void Window::pollEvents() {
+  glfwPollEvents();
+}
 
-void Window::swapBuffers() { glfwSwapBuffers(window); }
+void Window::swapBuffers() {
+  glfwSwapBuffers(window);
+}
 
-void Window::framebufferSizeCallback(GLFWwindow *window, int width,
+void Window::framebufferSizeCallback(GLFWwindow* window, int width,
                                      int height) {
   (void)window;
   glViewport(0, 0, width, height);
 }
 
-} // namespace Engine
+void Window::setCursorCaptured(bool captured) {
+  if (captured) {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  } else {
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  }
+}
+
+}  // namespace Engine

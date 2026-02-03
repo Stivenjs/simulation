@@ -1,0 +1,84 @@
+/**
+ * @file Application.hpp
+ * @brief Clase principal de la aplicación
+ *
+ * Similar a una clase App en frameworks modernos
+ */
+
+#ifndef APPLICATION_HPP
+#define APPLICATION_HPP
+
+#include "renderer/Mesh.hpp"
+#include "core/InputManager.hpp"
+#include "engine/Window.hpp"
+#include "renderer/Camera.hpp"
+#include "renderer/Shader.hpp"
+#include <memory>
+#include <vector>
+
+namespace Core {
+
+/**
+ * @class Application
+ * @brief Coordina el motor: ventana, renderizado, input, simulación
+ */
+class Application {
+ public:
+  /**
+   * @brief Constructor
+   * @param width Ancho de la ventana
+   * @param height Alto de la ventana
+   * @param title Título de la ventana
+   */
+  Application(int width, int height, const std::string& title);
+
+  /**
+   * @brief Destructor
+   */
+  ~Application() = default;
+
+  /**
+   * @brief Inicializa la aplicación
+   */
+  void init();
+
+  /**
+   * @brief Ejecuta el loop principal
+   */
+  void run();
+
+ private:
+  // Componentes principales
+  std::unique_ptr<Engine::Window> window;
+  std::unique_ptr<Renderer::Shader> shader;
+  std::unique_ptr<Renderer::Camera> camera;
+  std::unique_ptr<InputManager> inputManager;
+  std::vector<std::unique_ptr<Renderer::Mesh>> meshes;
+
+  // Configuración
+  int width, height;
+  std::string title;
+
+  // Tiempo
+  float lastFrame;
+  float deltaTime;
+
+  /**
+   * @brief Actualiza la lógica del juego/simulación
+   */
+  void update();
+
+  /**
+   * @brief Renderiza la escena
+   */
+  void render();
+
+  /**
+   * @brief Calcula delta time
+   */
+  void calculateDeltaTime();
+};
+
+}  // namespace Core
+
+#endif  // APPLICATION_HPP
