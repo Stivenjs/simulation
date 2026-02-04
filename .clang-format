@@ -18,7 +18,6 @@ BreakConstructorInitializers: AfterColon
 ConstructorInitializerIndentWidth: 4
 AllowAllConstructorInitializersOnNextLine: true
 
-# Includes - NO reordenar automáticamente para evitar problemas con GLEW/OpenGL
 SortIncludes: Never
 IncludeBlocks: Preserve
 IncludeCategories:
