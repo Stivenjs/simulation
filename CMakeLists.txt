@@ -66,22 +66,13 @@ link_directories(
     ${GLEW_LIBRARY_DIRS}
 )
 
-# Archivos fuente
-set(SOURCES
-    src/main.cpp
-    src/core/Application.cpp
-    src/core/InputManager.cpp
-    src/core/Grid2D.cpp
-    src/core/Simulator.cpp
-    src/core/Rules.cpp
-    src/core/Stats.cpp
-    src/engine/Window.cpp
-    src/renderer/Shader.cpp
-    src/renderer/Camera.cpp
-    src/renderer/Mesh.cpp
-    src/renderer/UI.cpp
-    ${IMGUI_SOURCES}
+# Recopilar automáticamente todos los archivos .cpp del proyecto
+file(GLOB_RECURSE SOURCES
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
+
+# Agregar archivos de ImGui
+list(APPEND SOURCES ${IMGUI_SOURCES})
 
 # Ejecutable principal
 add_executable(simulation ${SOURCES})
