@@ -14,6 +14,7 @@
 
   "editor.formatOnSave": true,
   "editor.formatOnType": false,
+
   "[cpp]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
     "editor.tabSize": 4
@@ -23,8 +24,7 @@
     "editor.tabSize": 4
   },
   "[cmake]": {
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
-    "editor.tabSize": 4
+    "editor.tabSize": 2
   },
   "[h]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
@@ -33,6 +33,12 @@
   "[hpp]": {
     "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
     "editor.tabSize": 4
+  },
+  "[glsl]": {
+    "editor.tabSize": 4
+  },
+  "[json]": {
+    "editor.tabSize": 2
   },
 
   "cmake.configureOnOpen": true,
@@ -44,7 +50,11 @@
     "*.hpp": "cpp",
     "*.cpp": "cpp",
     "*.tpp": "cpp",
-    "*.ipp": "cpp"
+    "*.ipp": "cpp",
+    "*.vert": "glsl",
+    "*.frag": "glsl",
+    "*.geom": "glsl",
+    "*.comp": "glsl"
   },
 
   "editor.tabSize": 4,
