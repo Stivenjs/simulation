@@ -18,7 +18,7 @@ namespace Core {
  * @brief Aplica reglas de evolución al grid
  */
 class Simulator {
-   public:
+public:
     /**
      * @brief Constructor
      * @param grid Referencia al grid a simular
@@ -34,48 +34,36 @@ class Simulator {
      * @brief Establece si la simulación está pausada
      * @param paused true para pausar
      */
-    void setPaused(bool paused) {
-        this->paused = paused;
-    }
+    void setPaused(bool paused) { this->paused = paused; }
 
     /**
      * @brief Verifica si está pausada
      * @return true si está pausada
      */
-    bool isPaused() const {
-        return paused;
-    }
+    bool isPaused() const { return paused; }
 
     /**
      * @brief Alterna pausa/ejecución
      */
-    void togglePause() {
-        paused = !paused;
-    }
+    void togglePause() { paused = !paused; }
 
     /**
      * @brief Establece la velocidad de simulación
      * @param stepsPerSecond Pasos por segundo
      */
-    void setSpeed(float stepsPerSecond) {
-        updateInterval = 1.0f / stepsPerSecond;
-    }
+    void setSpeed(float stepsPerSecond) { updateInterval = 1.0f / stepsPerSecond; }
 
     /**
      * @brief Establece el tipo de reglas
      * @param type Tipo de reglas a usar
      */
-    void setRuleType(RuleType type) {
-        currentRule = type;
-    }
+    void setRuleType(RuleType type) { currentRule = type; }
 
     /**
      * @brief Obtiene el tipo de reglas actual
      * @return Tipo de reglas
      */
-    RuleType getRuleType() const {
-        return currentRule;
-    }
+    RuleType getRuleType() const { return currentRule; }
 
     /**
      * @brief Cambia a la siguiente regla
@@ -86,16 +74,12 @@ class Simulator {
      * @brief Obtiene el número de generación actual
      * @return Generación
      */
-    int getGeneration() const {
-        return generation;
-    }
+    int getGeneration() const { return generation; }
 
     /**
      * @brief Reinicia el contador de generaciones
      */
-    void resetGeneration() {
-        generation = 0;
-    }
+    void resetGeneration() { generation = 0; }
 
     /**
      * @brief Actualiza el simulador (llama step() según tiempo)
@@ -103,7 +87,7 @@ class Simulator {
      */
     void update(float deltaTime);
 
-   private:
+private:
     Grid2D& grid;
     bool paused;
     float updateInterval;  // Segundos entre updates

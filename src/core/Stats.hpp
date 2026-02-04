@@ -18,7 +18,7 @@ namespace Core {
  * @brief Calcula y mantiene estadísticas de la simulación
  */
 class Stats {
-   public:
+public:
     /**
      * @brief Constructor
      */
@@ -35,17 +35,13 @@ class Stats {
      * @brief Obtiene población actual
      * @return Número de células vivas
      */
-    int getPopulation() const {
-        return population;
-    }
+    int getPopulation() const { return population; }
 
     /**
      * @brief Obtiene FPS actual
      * @return Frames por segundo
      */
-    float getFPS() const {
-        return fps;
-    }
+    float getFPS() const { return fps; }
 
     /**
      * @brief Obtiene estadísticas como string
@@ -53,7 +49,7 @@ class Stats {
      */
     std::string toString() const;
 
-   private:
+private:
     int population;
     float fps;
     float fpsAccumulator;

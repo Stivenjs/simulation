@@ -28,7 +28,7 @@ enum class CellState : uint8_t {
  * @brief Grilla 2D con estados discretos por celda
  */
 class Grid2D {
-   public:
+public:
     /**
      * @brief Constructor
      * @param width Ancho de la grilla
@@ -56,17 +56,13 @@ class Grid2D {
      * @brief Obtiene el ancho de la grilla
      * @return Ancho
      */
-    int getWidth() const {
-        return width;
-    }
+    int getWidth() const { return width; }
 
     /**
      * @brief Obtiene el alto de la grilla
      * @return Alto
      */
-    int getHeight() const {
-        return height;
-    }
+    int getHeight() const { return height; }
 
     /**
      * @brief Limpia la grilla (todas las celdas a DEAD)
@@ -96,7 +92,7 @@ class Grid2D {
      */
     void getCellColor(int x, int y, float& r, float& g, float& b) const;
 
-   private:
+private:
     int width;
     int height;
     std::vector<CellState> cells;

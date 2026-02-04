@@ -11,12 +11,10 @@
 
 namespace Renderer {
 
-UI::UI(GLFWwindow* window, const char* glsl_version)
-    : showStatsWindow(true),
-      showControlsWindow(true),
-      showVideoSettingsWindow(false),
-      selectedResolutionIndex(0),
-      selectedDisplayModeIndex(0) {
+UI::UI(GLFWwindow* window, const char* glsl_version) :
+    showStatsWindow(true), showControlsWindow(true), showVideoSettingsWindow(false), selectedResolutionIndex(0),
+    selectedDisplayModeIndex(0)
+{
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -32,25 +30,28 @@ UI::UI(GLFWwindow* window, const char* glsl_version)
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
 
-UI::~UI() {
+UI::~UI()
+{
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 }
 
-void UI::newFrame() {
+void UI::newFrame()
+{
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
-void UI::render() {
+void UI::render()
+{
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
 
-void UI::renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
-                          Core::Grid2D& grid) {
+void UI::renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats, Core::Grid2D& grid)
+{
     if (!showStatsWindow)
         return;
 
@@ -66,11 +67,9 @@ void UI::renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
 
     // Estadísticas
     ImGui::Text("Generation: %d", simulator.getGeneration());
-    ImGui::Text("Population: %d / %d cells", stats.getPopulation(),
-                grid.getWidth() * grid.getHeight());
+    ImGui::Text("Population: %d / %d cells", stats.getPopulation(), grid.getWidth() * grid.getHeight());
 
-    float density = (float)stats.getPopulation() /
-                    (grid.getWidth() * grid.getHeight()) * 100.0f;
+    float density = (float)stats.getPopulation() / (grid.getWidth() * grid.getHeight()) * 100.0f;
     ImGui::Text("Density: %.1f%%", density);
 
     ImGui::Separator();
@@ -79,9 +78,7 @@ void UI::renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
     // Estado de la simulación
     ImGui::Separator();
     const char* status = simulator.isPaused() ? "PAUSED" : "RUNNING";
-    ImGui::TextColored(
-        simulator.isPaused() ? ImVec4(1, 0.5f, 0, 1) : ImVec4(0, 1, 0, 1),
-        "Status: %s", status);
+    ImGui::TextColored(simulator.isPaused() ? ImVec4(1, 0.5f, 0, 1) : ImVec4(0, 1, 0, 1), "Status: %s", status);
 
     // Botón para abrir configuración de video
     ImGui::Separator();
@@ -92,7 +89,8 @@ void UI::renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
     ImGui::End();
 }
 
-void UI::renderVideoSettingsPanel(Engine::Window& window) {
+void UI::renderVideoSettingsPanel(Engine::Window& window)
+{
     if (!showVideoSettingsWindow) {
         return;
     }
@@ -117,8 +115,7 @@ void UI::renderVideoSettingsPanel(Engine::Window& window) {
         int currentWidth = window.getWidth();
         int currentHeight = window.getHeight();
         for (size_t i = 0; i < resolutions.size(); i++) {
-            if (resolutions[i].width == currentWidth &&
-                resolutions[i].height == currentHeight) {
+            if (resolutions[i].width == currentWidth && resolutions[i].height == currentHeight) {
                 selectedResolutionIndex = static_cast<int>(i);
                 break;
             }
@@ -134,18 +131,16 @@ void UI::renderVideoSettingsPanel(Engine::Window& window) {
 
     // Selector de resolución
     std::string currentResLabel = "Sin resoluciones";
-    if (!resolutions.empty() && selectedResolutionIndex >= 0 &&
-        selectedResolutionIndex < static_cast<int>(resolutions.size())) {
-        currentResLabel =
-            std::to_string(resolutions[selectedResolutionIndex].width) + " x " +
-            std::to_string(resolutions[selectedResolutionIndex].height);
+    if (!resolutions.empty() && selectedResolutionIndex >= 0
+        && selectedResolutionIndex < static_cast<int>(resolutions.size())) {
+        currentResLabel = std::to_string(resolutions[selectedResolutionIndex].width) + " x "
+                          + std::to_string(resolutions[selectedResolutionIndex].height);
     }
 
     if (ImGui::BeginCombo("##resolution", currentResLabel.c_str())) {
         for (int i = 0; i < static_cast<int>(resolutions.size()); i++) {
             bool isSelected = (selectedResolutionIndex == i);
-            std::string label = std::to_string(resolutions[i].width) + " x " +
-                                std::to_string(resolutions[i].height);
+            std::string label = std::to_string(resolutions[i].width) + " x " + std::to_string(resolutions[i].height);
 
             if (ImGui::Selectable(label.c_str(), isSelected)) {
                 selectedResolutionIndex = i;
@@ -165,11 +160,9 @@ void UI::renderVideoSettingsPanel(Engine::Window& window) {
     ImGui::Spacing();
 
     // Selector de modo de pantalla
-    const char* displayModes[] = {"Ventana", "Pantalla Completa",
-                                  "Pantalla Completa sin Bordes"};
+    const char* displayModes[] = { "Ventana", "Pantalla Completa", "Pantalla Completa sin Bordes" };
 
-    ImGui::Combo("##displaymode", &selectedDisplayModeIndex, displayModes,
-                 IM_ARRAYSIZE(displayModes));
+    ImGui::Combo("##displaymode", &selectedDisplayModeIndex, displayModes, IM_ARRAYSIZE(displayModes));
 
     ImGui::Spacing();
     ImGui::Spacing();
@@ -182,15 +175,15 @@ void UI::renderVideoSettingsPanel(Engine::Window& window) {
 
     const char* currentMode = "";
     switch (window.getDisplayMode()) {
-        case Engine::Window::DisplayMode::Windowed:
-            currentMode = "Ventana";
-            break;
-        case Engine::Window::DisplayMode::Fullscreen:
-            currentMode = "Pantalla Completa";
-            break;
-        case Engine::Window::DisplayMode::BorderlessFullscreen:
-            currentMode = "Pantalla Completa sin Bordes";
-            break;
+    case Engine::Window::DisplayMode::Windowed:
+        currentMode = "Ventana";
+        break;
+    case Engine::Window::DisplayMode::Fullscreen:
+        currentMode = "Pantalla Completa";
+        break;
+    case Engine::Window::DisplayMode::BorderlessFullscreen:
+        currentMode = "Pantalla Completa sin Bordes";
+        break;
     }
     ImGui::Text("Modo: %s", currentMode);
 
@@ -201,15 +194,12 @@ void UI::renderVideoSettingsPanel(Engine::Window& window) {
 
     // Botón para aplicar cambios
     if (ImGui::Button("Aplicar Cambios", ImVec2(195, 30))) {
-        if (!resolutions.empty() && selectedResolutionIndex >= 0 &&
-            selectedResolutionIndex < static_cast<int>(resolutions.size())) {
-            Engine::Window::DisplayMode mode =
-                static_cast<Engine::Window::DisplayMode>(
-                    selectedDisplayModeIndex);
+        if (!resolutions.empty() && selectedResolutionIndex >= 0
+            && selectedResolutionIndex < static_cast<int>(resolutions.size())) {
+            Engine::Window::DisplayMode mode = static_cast<Engine::Window::DisplayMode>(selectedDisplayModeIndex);
 
             window.setDisplayMode(resolutions[selectedResolutionIndex].width,
-                                  resolutions[selectedResolutionIndex].height,
-                                  mode);
+                                  resolutions[selectedResolutionIndex].height, mode);
         }
     }
 

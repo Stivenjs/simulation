@@ -9,8 +9,8 @@
 #define SHADER_HPP
 
 #include <GL/glew.h>
-#include <string>
 #include <memory>
+#include <string>
 
 namespace Renderer {
 
@@ -19,7 +19,7 @@ namespace Renderer {
  * @brief Clase para gestionar programas de shader OpenGL
  */
 class Shader {
-   public:
+public:
     /**
      * @brief Constructor desde código fuente directo
      * @param vertexSource Código fuente del vertex shader
@@ -33,8 +33,7 @@ class Shader {
      * @param fragmentPath Ruta al archivo fragment shader (.frag)
      * @return unique_ptr al Shader cargado desde archivos
      */
-    static std::unique_ptr<Shader> fromFiles(const std::string& vertexPath,
-                                             const std::string& fragmentPath);
+    static std::unique_ptr<Shader> fromFiles(const std::string& vertexPath, const std::string& fragmentPath);
 
     /**
      * @brief Destructor - Limpia recursos OpenGL
@@ -59,9 +58,7 @@ class Shader {
      * @brief Obtiene el ID del programa shader
      * @return ID del programa OpenGL
      */
-    GLuint getProgram() const {
-        return program;
-    }
+    GLuint getProgram() const { return program; }
 
     /**
      * @brief Establece un uniform float
@@ -86,7 +83,7 @@ class Shader {
      */
     void setMat4(const std::string& name, const float* matrix) const;
 
-   private:
+private:
     GLuint program;
 
     /**

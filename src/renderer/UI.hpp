@@ -8,11 +8,11 @@
 #ifndef UI_HPP
 #define UI_HPP
 
-#include <GLFW/glfw3.h>
+#include "core/Grid2D.hpp"
 #include "core/Simulator.hpp"
 #include "core/Stats.hpp"
-#include "core/Grid2D.hpp"
 #include "engine/Window.hpp"
+#include <GLFW/glfw3.h>
 
 namespace Renderer {
 
@@ -21,7 +21,7 @@ namespace Renderer {
  * @brief Interfaz de usuario con ImGui
  */
 class UI {
-   public:
+public:
     /**
      * @brief Constructor
      * @param window Puntero a ventana GLFW
@@ -54,8 +54,7 @@ class UI {
      * @param stats Referencia a estadísticas
      * @param grid Referencia al grid
      */
-    void renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats,
-                          Core::Grid2D& grid);
+    void renderStatsPanel(Core::Simulator& simulator, Core::Stats& stats, Core::Grid2D& grid);
 
     /**
      * @brief Renderiza panel de configuración de video
@@ -63,7 +62,7 @@ class UI {
      */
     void renderVideoSettingsPanel(Engine::Window& window);
 
-   private:
+private:
     bool showStatsWindow;
     bool showControlsWindow;
     bool showVideoSettingsWindow;

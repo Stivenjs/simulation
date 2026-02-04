@@ -8,20 +8,11 @@
 
 namespace Renderer {
 
-Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 up)
-    : target(target),
-      up(up),
-      distance(glm::length(position - target)),
-      yaw(-90.0f),
-      pitch(0.0f),
-      mouseSensitivity(0.15f),
-      scrollSensitivity(0.5f),
-      panSpeed(2.5f),
-      minDistance(1.0f),
-      maxDistance(20.0f),
-      minPitch(-89.0f),
-      maxPitch(89.0f),
-      position(position) {
+Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 up) :
+    target(target), up(up), distance(glm::length(position - target)), yaw(-90.0f), pitch(0.0f), mouseSensitivity(0.15f),
+    scrollSensitivity(0.5f), panSpeed(2.5f), minDistance(1.0f), maxDistance(20.0f), minPitch(-89.0f), maxPitch(89.0f),
+    position(position)
+{
     // Calcular yaw y pitch iniciales desde la posición
     glm::vec3 direction = glm::normalize(position - target);
     yaw = glm::degrees(atan2(direction.z, direction.x));
@@ -30,11 +21,13 @@ Camera::Camera(glm::vec3 position, glm::vec3 target, glm::vec3 up)
     updateCameraPosition();
 }
 
-glm::mat4 Camera::getViewMatrix() const {
+glm::mat4 Camera::getViewMatrix() const
+{
     return glm::lookAt(position, target, up);
 }
 
-void Camera::processMouseMovement(float xoffset, float yoffset) {
+void Camera::processMouseMovement(float xoffset, float yoffset)
+{
     xoffset *= mouseSensitivity;
     yoffset *= mouseSensitivity;
 
@@ -47,14 +40,16 @@ void Camera::processMouseMovement(float xoffset, float yoffset) {
     updateCameraPosition();
 }
 
-void Camera::processMouseScroll(float yoffset) {
+void Camera::processMouseScroll(float yoffset)
+{
     distance -= yoffset * scrollSensitivity;
     distance = std::clamp(distance, minDistance, maxDistance);
 
     updateCameraPosition();
 }
 
-void Camera::pan(glm::vec3 direction, float deltaTime) {
+void Camera::pan(glm::vec3 direction, float deltaTime)
+{
     // Calcular vectores de la cámara
     glm::vec3 forward = glm::normalize(target - position);
     glm::vec3 right = glm::normalize(glm::cross(forward, up));
@@ -72,7 +67,8 @@ void Camera::pan(glm::vec3 direction, float deltaTime) {
     updateCameraPosition();
 }
 
-void Camera::updateCameraPosition() {
+void Camera::updateCameraPosition()
+{
     // Convertir coordenadas esféricas a cartesianas
     float yawRad = glm::radians(yaw);
     float pitchRad = glm::radians(pitch);

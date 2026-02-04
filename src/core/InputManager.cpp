@@ -14,16 +14,10 @@ namespace Core {
 
 InputManager* InputManager::instance = nullptr;
 
-InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera,
-                           Grid2D& grid, Simulator& simulator)
-    : window(window),
-      camera(camera),
-      grid(grid),
-      simulator(simulator),
-      lastX(400.0f),
-      lastY(300.0f),
-      firstMouse(true),
-      mousePressed(false) {
+InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid, Simulator& simulator) :
+    window(window), camera(camera), grid(grid), simulator(simulator), lastX(400.0f), lastY(300.0f), firstMouse(true),
+    mousePressed(false)
+{
     // Configurar callbacks
     instance = this;
     glfwSetCursorPosCallback(window, mouseCallback);
@@ -31,7 +25,8 @@ InputManager::InputManager(GLFWwindow* window, Renderer::Camera& camera,
     glfwSetScrollCallback(window, scrollCallback);
 }
 
-void InputManager::processKeyboard(float deltaTime) {
+void InputManager::processKeyboard(float deltaTime)
+{
     // ImGui verifica si quiere capturar el teclado
     ImGuiIO& io = ImGui::GetIO();
 
@@ -105,11 +100,13 @@ void InputManager::processKeyboard(float deltaTime) {
     }
 }
 
-bool InputManager::shouldClose() const {
+bool InputManager::shouldClose() const
+{
     return glfwWindowShouldClose(window);
 }
 
-void InputManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
+void InputManager::mouseCallback(GLFWwindow* window, double xpos, double ypos)
+{
     // Pasar el evento a ImGui primero
     ImGui_ImplGlfw_CursorPosCallback(window, xpos, ypos);
 
@@ -136,8 +133,8 @@ void InputManager::mouseCallback(GLFWwindow* window, double xpos, double ypos) {
     instance->camera.processMouseMovement(xoffset, yoffset);
 }
 
-void InputManager::mouseButtonCallback(GLFWwindow* window, int button,
-                                       int action, int mods) {
+void InputManager::mouseButtonCallback(GLFWwindow* window, int button, int action, int mods)
+{
     // Pasar el evento a ImGui primero
     ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
 
@@ -161,8 +158,8 @@ void InputManager::mouseButtonCallback(GLFWwindow* window, int button,
     }
 }
 
-void InputManager::scrollCallback(GLFWwindow* window, double xoffset,
-                                  double yoffset) {
+void InputManager::scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
+{
     // Pasar el evento a ImGui primero
     ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 

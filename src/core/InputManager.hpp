@@ -19,7 +19,7 @@ namespace Core {
  * @brief Maneja todos los eventos de input
  */
 class InputManager {
-   public:
+public:
     /**
      * @brief Constructor
      * @param window Puntero a la ventana GLFW
@@ -27,8 +27,7 @@ class InputManager {
      * @param grid Referencia al grid de simulación
      * @param simulator Referencia al simulador
      */
-    InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid,
-                 Simulator& simulator);
+    InputManager(GLFWwindow* window, Renderer::Camera& camera, Grid2D& grid, Simulator& simulator);
 
     /**
      * @brief Procesa input del teclado
@@ -42,7 +41,7 @@ class InputManager {
      */
     bool shouldClose() const;
 
-   private:
+private:
     GLFWwindow* window;
     Renderer::Camera& camera;
     Grid2D& grid;
@@ -55,10 +54,8 @@ class InputManager {
 
     // Callbacks estáticos
     static void mouseCallback(GLFWwindow* window, double xpos, double ypos);
-    static void mouseButtonCallback(GLFWwindow* window, int button, int action,
-                                    int mods);
-    static void scrollCallback(GLFWwindow* window, double xoffset,
-                               double yoffset);
+    static void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
+    static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 
     // Instancia global para callbacks (no ideal, pero necesario para GLFW)
     static InputManager* instance;

@@ -26,7 +26,7 @@ namespace Core {
  * @brief Coordina el motor: ventana, renderizado, input, simulación
  */
 class Application {
-   public:
+public:
     /**
      * @brief Constructor
      * @param width Ancho de la ventana
@@ -50,7 +50,7 @@ class Application {
      */
     void run();
 
-   private:
+private:
     // Componentes principales
     std::unique_ptr<Engine::Window> window;
     std::unique_ptr<Renderer::Shader> shader;

@@ -9,40 +9,43 @@
 
 namespace Core {
 
-Grid2D::Grid2D(int width, int height)
-    : width(width), height(height), cells(width * height, CellState::DEAD) {}
+Grid2D::Grid2D(int width, int height) : width(width), height(height), cells(width * height, CellState::DEAD) { }
 
-CellState Grid2D::getCell(int x, int y) const {
+CellState Grid2D::getCell(int x, int y) const
+{
     if (!isValid(x, y))
         return CellState::DEAD;
     return cells[getIndex(x, y)];
 }
 
-void Grid2D::setCell(int x, int y, CellState state) {
+void Grid2D::setCell(int x, int y, CellState state)
+{
     if (isValid(x, y)) {
         cells[getIndex(x, y)] = state;
     }
 }
 
-void Grid2D::clear() {
+void Grid2D::clear()
+{
     std::fill(cells.begin(), cells.end(), CellState::DEAD);
 }
 
-void Grid2D::randomize(float probability) {
+void Grid2D::randomize(float probability)
+{
     static std::random_device rd;
     static std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            CellState state =
-                (dis(gen) < probability) ? CellState::ALIVE : CellState::DEAD;
+            CellState state = (dis(gen) < probability) ? CellState::ALIVE : CellState::DEAD;
             setCell(x, y, state);
         }
     }
 }
 
-int Grid2D::countAliveNeighbors(int x, int y) const {
+int Grid2D::countAliveNeighbors(int x, int y) const
+{
     int count = 0;
 
     // Vecindario de Moore (8 vecinos)
@@ -64,15 +67,18 @@ int Grid2D::countAliveNeighbors(int x, int y) const {
     return count;
 }
 
-int Grid2D::getIndex(int x, int y) const {
+int Grid2D::getIndex(int x, int y) const
+{
     return y * width + x;
 }
 
-bool Grid2D::isValid(int x, int y) const {
+bool Grid2D::isValid(int x, int y) const
+{
     return x >= 0 && x < width && y >= 0 && y < height;
 }
 
-void Grid2D::getCellColor(int x, int y, float& r, float& g, float& b) const {
+void Grid2D::getCellColor(int x, int y, float& r, float& g, float& b) const
+{
     CellState state = getCell(x, y);
 
     if (state == CellState::DEAD) {
@@ -87,7 +93,6 @@ void Grid2D::getCellColor(int x, int y, float& r, float& g, float& b) const {
     int neighbors = countAliveNeighbors(x, y);
     float intensity = 0.3f + (neighbors / 8.0f) * 0.7f;  // 0.3 a 1.0
 
-    // Gradiente: azul (pocos) -> cyan -> verde -> amarillo (muchos)
     if (neighbors <= 2) {
         r = 0.0f;
         g = neighbors / 2.0f * 0.5f;

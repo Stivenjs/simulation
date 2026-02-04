@@ -9,10 +9,10 @@
 
 namespace Core {
 
-Stats::Stats()
-    : population(0), fps(0.0f), fpsAccumulator(0.0f), frameCount(0) {}
+Stats::Stats() : population(0), fps(0.0f), fpsAccumulator(0.0f), frameCount(0) { }
 
-void Stats::update(const Grid2D& grid, float deltaTime) {
+void Stats::update(const Grid2D& grid, float deltaTime)
+{
     // Calcular población
     population = 0;
     for (int y = 0; y < grid.getHeight(); ++y) {
@@ -34,10 +34,10 @@ void Stats::update(const Grid2D& grid, float deltaTime) {
     }
 }
 
-std::string Stats::toString() const {
+std::string Stats::toString() const
+{
     std::stringstream ss;
-    ss << "Population: " << std::setw(4) << population
-       << " | FPS: " << std::fixed << std::setprecision(1) << fps;
+    ss << "Population: " << std::setw(4) << population << " | FPS: " << std::fixed << std::setprecision(1) << fps;
     return ss.str();
 }
 

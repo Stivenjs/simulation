@@ -9,9 +9,9 @@
 #define MESH_HPP
 
 #include <GL/glew.h>
-#include <vector>
-#include <memory>
 #include <glm/glm.hpp>
+#include <memory>
+#include <vector>
 
 namespace Renderer {
 
@@ -29,14 +29,13 @@ struct Vertex {
  * @brief Representa una malla 3D con vértices e índices
  */
 class Mesh {
-   public:
+public:
     /**
      * @brief Constructor
      * @param vertices Vector de vértices
      * @param indices Vector de índices
      */
-    Mesh(const std::vector<Vertex>& vertices,
-         const std::vector<unsigned int>& indices);
+    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 
     /**
      * @brief Destructor - Limpia recursos OpenGL
@@ -62,19 +61,15 @@ class Mesh {
      * @brief Obtiene la matriz de transformación
      * @return Matriz de modelo
      */
-    glm::mat4 getModelMatrix() const {
-        return modelMatrix;
-    }
+    glm::mat4 getModelMatrix() const { return modelMatrix; }
 
     /**
      * @brief Establece la matriz de transformación
      * @param matrix Nueva matriz de modelo
      */
-    void setModelMatrix(const glm::mat4& matrix) {
-        modelMatrix = matrix;
-    }
+    void setModelMatrix(const glm::mat4& matrix) { modelMatrix = matrix; }
 
-   private:
+private:
     GLuint VAO, VBO, EBO;
     unsigned int indexCount;
     glm::mat4 modelMatrix;
@@ -82,8 +77,7 @@ class Mesh {
     /**
      * @brief Configura los buffers de OpenGL
      */
-    void setupMesh(const std::vector<Vertex>& vertices,
-                   const std::vector<unsigned int>& indices);
+    void setupMesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices);
 };
 
 }  // namespace Renderer

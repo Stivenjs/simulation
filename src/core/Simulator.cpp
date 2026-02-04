@@ -7,15 +7,13 @@
 
 namespace Core {
 
-Simulator::Simulator(Grid2D& grid)
-    : grid(grid),
-      paused(true),
-      updateInterval(0.1f),
-      accumulator(0.0f),
-      currentRule(RuleType::CONWAY),
-      generation(0) {}
+Simulator::Simulator(Grid2D& grid) :
+    grid(grid), paused(true), updateInterval(0.1f), accumulator(0.0f), currentRule(RuleType::CONWAY), generation(0)
+{
+}
 
-void Simulator::step() {
+void Simulator::step()
+{
     int width = grid.getWidth();
     int height = grid.getHeight();
 
@@ -27,8 +25,7 @@ void Simulator::step() {
         for (int x = 0; x < width; ++x) {
             int neighbors = grid.countAliveNeighbors(x, y);
             CellState currentState = grid.getCell(x, y);
-            newStates[y * width + x] =
-                Rules::apply(currentRule, currentState, neighbors);
+            newStates[y * width + x] = Rules::apply(currentRule, currentState, neighbors);
         }
     }
 
@@ -40,13 +37,14 @@ void Simulator::step() {
     }
 }
 
-void Simulator::nextRule() {
-    int nextRuleIndex =
-        (static_cast<int>(currentRule) + 1) % static_cast<int>(RuleType::COUNT);
+void Simulator::nextRule()
+{
+    int nextRuleIndex = (static_cast<int>(currentRule) + 1) % static_cast<int>(RuleType::COUNT);
     currentRule = static_cast<RuleType>(nextRuleIndex);
 }
 
-void Simulator::update(float deltaTime) {
+void Simulator::update(float deltaTime)
+{
     if (paused)
         return;
 

@@ -30,7 +30,7 @@ enum class RuleType {
  * @brief Conjunto de reglas para evolución celular
  */
 class Rules {
-   public:
+public:
     /**
      * @brief Obtiene el nombre de un tipo de regla
      * @param type Tipo de regla
@@ -45,10 +45,9 @@ class Rules {
      * @param neighbors Número de vecinos vivos
      * @return Nuevo estado
      */
-    static CellState apply(RuleType type, CellState currentState,
-                           int neighbors);
+    static CellState apply(RuleType type, CellState currentState, int neighbors);
 
-   private:
+private:
     // Reglas específicas
     static CellState conway(CellState current, int neighbors);
     static CellState seeds(CellState current, int neighbors);

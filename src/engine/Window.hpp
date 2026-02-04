@@ -20,7 +20,7 @@ namespace Engine {
  * @brief Clase para gestionar la ventana de renderizado
  */
 class Window {
-   public:
+public:
     /**
      * @brief Constructor
      * @param width Ancho de la ventana en píxeles
@@ -58,25 +58,19 @@ class Window {
      * @brief Obtiene el puntero a la ventana GLFW
      * @return Puntero a GLFWwindow
      */
-    GLFWwindow* getHandle() const {
-        return window;
-    }
+    GLFWwindow* getHandle() const { return window; }
 
     /**
      * @brief Obtiene el ancho actual de la ventana
      * @return Ancho en píxeles
      */
-    int getWidth() const {
-        return width;
-    }
+    int getWidth() const { return width; }
 
     /**
      * @brief Obtiene el alto actual de la ventana
      * @return Alto en píxeles
      */
-    int getHeight() const {
-        return height;
-    }
+    int getHeight() const { return height; }
 
     /**
      * @brief Establece si el cursor está capturado
@@ -96,18 +90,14 @@ class Window {
         int width;
         int height;
 
-        bool operator==(const Resolution& other) const {
-            return width == other.width && height == other.height;
-        }
+        bool operator==(const Resolution& other) const { return width == other.width && height == other.height; }
     };
 
     /**
      * @brief Obtiene el modo de pantalla actual
      * @return Modo de pantalla actual
      */
-    DisplayMode getDisplayMode() const {
-        return displayMode;
-    }
+    DisplayMode getDisplayMode() const { return displayMode; }
 
     /**
      * @brief Obtiene las resoluciones disponibles del monitor
@@ -138,7 +128,7 @@ class Window {
      */
     void setWindowed();
 
-   private:
+private:
     GLFWwindow* window;
     int width;
     int height;
@@ -159,8 +149,7 @@ class Window {
     /**
      * @brief Callback para manejar cambios de tamaño
      */
-    static void framebufferSizeCallback(GLFWwindow* window, int width,
-                                        int height);
+    static void framebufferSizeCallback(GLFWwindow* window, int width, int height);
 };
 
 }  // namespace Engine

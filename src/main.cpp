@@ -8,7 +8,8 @@
 #include "core/Application.hpp"
 #include <iostream>
 
-int main() {
+int main()
+{
     try {
         Core::Application app(800, 600, "3D Universe Simulation");
 

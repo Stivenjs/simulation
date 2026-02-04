@@ -18,15 +18,14 @@ namespace Renderer {
  * @brief Cámara orbital con controles de mouse y teclado
  */
 class Camera {
-   public:
+public:
     /**
      * @brief Constructor
      * @param position Posición inicial de la cámara
      * @param target Punto al que mira la cámara
      * @param up Vector up (generalmente (0,1,0))
      */
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f),
-           glm::vec3 target = glm::vec3(0.0f, 0.0f, 0.0f),
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 5.0f), glm::vec3 target = glm::vec3(0.0f, 0.0f, 0.0f),
            glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f));
 
     /**
@@ -59,19 +58,15 @@ class Camera {
      * @brief Obtiene la distancia al objetivo
      * @return Distancia
      */
-    float getDistance() const {
-        return distance;
-    }
+    float getDistance() const { return distance; }
 
     /**
      * @brief Obtiene el objetivo de la cámara
      * @return Punto objetivo
      */
-    glm::vec3 getTarget() const {
-        return target;
-    }
+    glm::vec3 getTarget() const { return target; }
 
-   private:
+private:
     // Parámetros de la cámara orbital
     glm::vec3 target;  // Punto al que mira
     glm::vec3 up;      // Vector up

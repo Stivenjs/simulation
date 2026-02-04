@@ -6,21 +6,20 @@
 #include <GL/glew.h>
 #include "Application.hpp"
 #include <GLFW/glfw3.h>
-#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 
 namespace Core {
 
-Application::Application(int width, int height, const std::string& title)
-    : width(width),
-      height(height),
-      title(title),
-      lastFrame(0.0f),
-      deltaTime(0.0f) {}
+Application::Application(int width, int height, const std::string& title) :
+    width(width), height(height), title(title), lastFrame(0.0f), deltaTime(0.0f)
+{
+}
 
-void Application::init() {
+void Application::init()
+{
     std::cout << "Initializing 3D Simulation Engine..." << std::endl;
 
     // Crear ventana
@@ -28,8 +27,7 @@ void Application::init() {
 
     // Cargar shaders
     std::cout << "Loading shaders..." << std::endl;
-    shader =
-        Renderer::Shader::fromFiles("shaders/basic.vert", "shaders/basic.frag");
+    shader = Renderer::Shader::fromFiles("shaders/basic.vert", "shaders/basic.frag");
 
     // Crear cámara
     camera = std::make_unique<Renderer::Camera>(glm::vec3(0.0f, 2.0f, 5.0f));
@@ -54,14 +52,12 @@ void Application::init() {
     cubeMesh = Renderer::Mesh::createCube();
 
     // Crear input manager (después de grid y simulator)
-    inputManager = std::make_unique<InputManager>(window->getHandle(), *camera,
-                                                  *grid, *simulator);
+    inputManager = std::make_unique<InputManager>(window->getHandle(), *camera, *grid, *simulator);
 
     // Configurar OpenGL
     glEnable(GL_DEPTH_TEST);
 
-    std::cout << "\nGrid initialized: " << grid->getWidth() << "x"
-              << grid->getHeight() << std::endl;
+    std::cout << "\nGrid initialized: " << grid->getWidth() << "x" << grid->getHeight() << std::endl;
     std::cout << "Simulation: Game of Life (Conway)" << std::endl;
     std::cout << "\nControls:" << std::endl;
     std::cout << "  SPACE: Pause/Resume simulation" << std::endl;
@@ -74,7 +70,8 @@ void Application::init() {
     std::cout << "  ESC: Exit\n" << std::endl;
 }
 
-void Application::run() {
+void Application::run()
+{
     while (!window->shouldClose()) {
         calculateDeltaTime();
         update();
@@ -86,7 +83,8 @@ void Application::run() {
     std::cout << "Shutting down..." << std::endl;
 }
 
-void Application::update() {
+void Application::update()
+{
     inputManager->processKeyboard(deltaTime);
     simulator->update(deltaTime);
     stats->update(*grid, deltaTime);
@@ -95,14 +93,14 @@ void Application::update() {
     static float statsTimer = 0.0f;
     statsTimer += deltaTime;
     if (statsTimer >= 1.0f) {
-        std::cout << "\r" << Rules::getName(simulator->getRuleType())
-                  << " | Gen: " << simulator->getGeneration() << " | "
-                  << stats->toString() << "          " << std::flush;
+        std::cout << "\r" << Rules::getName(simulator->getRuleType()) << " | Gen: " << simulator->getGeneration()
+                  << " | " << stats->toString() << "          " << std::flush;
         statsTimer = 0.0f;
     }
 }
 
-void Application::render() {
+void Application::render()
+{
     // Limpiar pantalla
     glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -115,9 +113,8 @@ void Application::render() {
     // Matriz de proyección (usar tamaño actual de la ventana)
     int currentWidth = window->getWidth();
     int currentHeight = window->getHeight();
-    glm::mat4 projection = glm::perspective(
-        glm::radians(45.0f), (float)currentWidth / (float)currentHeight, 0.1f,
-        100.0f);
+    glm::mat4 projection
+        = glm::perspective(glm::radians(45.0f), (float)currentWidth / (float)currentHeight, 0.1f, 100.0f);
 
     shader->setMat4("view", glm::value_ptr(view));
     shader->setMat4("projection", glm::value_ptr(projection));
@@ -134,11 +131,8 @@ void Application::render() {
             // Solo renderizar celdas vivas
             if (state == CellState::ALIVE) {
                 glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(
-                    model, glm::vec3(gridOffsetX + x * spacing, 0.0f,
-                                     gridOffsetZ + y * spacing));
-                model =
-                    glm::scale(model, glm::vec3(0.5f));  // Cubos más pequeños
+                model = glm::translate(model, glm::vec3(gridOffsetX + x * spacing, 0.0f, gridOffsetZ + y * spacing));
+                model = glm::scale(model, glm::vec3(0.5f));  // Cubos más pequeños
 
                 // Obtener color dinámico basado en vecinos
                 float r, g, b;
@@ -160,7 +154,8 @@ void Application::render() {
     ui->render();
 }
 
-void Application::calculateDeltaTime() {
+void Application::calculateDeltaTime()
+{
     float currentFrame = glfwGetTime();
     deltaTime = currentFrame - lastFrame;
     lastFrame = currentFrame;
