@@ -64,7 +64,6 @@ private:
     std::unique_ptr<Grid2D> grid;
     std::unique_ptr<Simulator> simulator;
     std::unique_ptr<Stats> stats;
-    std::unique_ptr<Renderer::Mesh> cubeMesh;
     std::vector<std::unique_ptr<Renderer::Model>> loadedModels;
 
     // Iluminación

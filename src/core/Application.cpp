@@ -14,7 +14,6 @@
 
 namespace Core {
 
-// Carpeta donde están los modelos 3D (se busca recursivamente)
 static const char* const MODELS_DIRECTORY = "assets/models";
 
 Application::Application(int width, int height, const std::string& title) :
@@ -51,9 +50,6 @@ void Application::init()
 
     // Crear estadísticas
     stats = std::make_unique<Stats>();
-
-    // Crear mesh del cubo (reutilizable para cada celda)
-    cubeMesh = Renderer::Mesh::createCube();
 
     // Cargar todos los modelos 3D de la carpeta assets/models/
     std::cout << "Loading models from: " << MODELS_DIRECTORY << std::endl;
@@ -183,32 +179,6 @@ void Application::render()
     // Enviar datos de iluminación y material
     lightManager.apply(*shader);
     material.apply(*shader);
-
-    // Renderizar grid - un cubo por cada celda
-    float spacing = 1.2f;  // Espacio entre cubos
-    float gridOffsetX = -(grid->getWidth() * spacing) / 2.0f;
-    float gridOffsetZ = -(grid->getHeight() * spacing) / 2.0f;
-
-    for (int y = 0; y < grid->getHeight(); ++y) {
-        for (int x = 0; x < grid->getWidth(); ++x) {
-            CellState state = grid->getCell(x, y);
-
-            // Solo renderizar celdas vivas
-            if (state == CellState::ALIVE) {
-                glm::mat4 model = glm::mat4(1.0f);
-                model = glm::translate(model, glm::vec3(gridOffsetX + x * spacing, 0.0f, gridOffsetZ + y * spacing));
-                model = glm::scale(model, glm::vec3(0.5f));
-
-                // Obtener color dinámico basado en vecinos
-                float r, g, b;
-                grid->getCellColor(x, y, r, g, b);
-
-                shader->setMat4("model", glm::value_ptr(model));
-                shader->setVec3("cellColor", r, g, b);
-                cubeMesh->draw(*shader);
-            }
-        }
-    }
 
     // Renderizar todos los modelos 3D cargados
     for (size_t i = 0; i < loadedModels.size(); ++i) {
