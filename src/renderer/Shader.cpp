@@ -111,6 +111,12 @@ void Shader::checkCompileErrors(GLuint shader, const std::string& type)
     }
 }
 
+void Shader::setInt(const std::string& name, int value) const
+{
+    GLint location = glGetUniformLocation(program, name.c_str());
+    glUniform1i(location, value);
+}
+
 void Shader::setFloat(const std::string& name, float value) const
 {
     GLint location = glGetUniformLocation(program, name.c_str());

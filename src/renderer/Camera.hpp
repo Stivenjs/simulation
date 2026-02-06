@@ -66,6 +66,12 @@ public:
      */
     glm::vec3 getTarget() const { return target; }
 
+    /**
+     * @brief Obtiene la posición actual de la cámara
+     * @return Posición en world space
+     */
+    glm::vec3 getPosition() const { return position; }
+
 private:
     // Parámetros de la cámara orbital
     glm::vec3 target;  // Punto al que mira

@@ -15,17 +15,13 @@ UI::UI(GLFWwindow* window, const char* glsl_version) :
     showStatsWindow(true), showControlsWindow(true), showVideoSettingsWindow(false), selectedResolutionIndex(0),
     selectedDisplayModeIndex(0)
 {
-    // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
 
-    // Setup Dear ImGui style
     ImGui::StyleColorsDark();
 
-    // Setup Platform/Renderer backends
-    // false = no instalar callbacks automáticamente, los manejará InputManager
     ImGui_ImplGlfw_InitForOpenGL(window, false);
     ImGui_ImplOpenGL3_Init(glsl_version);
 }
@@ -111,7 +107,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
         resolutions = window.getAvailableResolutions();
         initialized = true;
 
-        // Encontrar la resolución actual
         int currentWidth = window.getWidth();
         int currentHeight = window.getHeight();
         for (size_t i = 0; i < resolutions.size(); i++) {
@@ -121,7 +116,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
             }
         }
 
-        // Establecer el modo actual
         selectedDisplayModeIndex = static_cast<int>(window.getDisplayMode());
     }
 
@@ -129,7 +123,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
     ImGui::Separator();
     ImGui::Spacing();
 
-    // Selector de resolución
     std::string currentResLabel = "Sin resoluciones";
     if (!resolutions.empty() && selectedResolutionIndex >= 0
         && selectedResolutionIndex < static_cast<int>(resolutions.size())) {
@@ -159,7 +152,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
     ImGui::Separator();
     ImGui::Spacing();
 
-    // Selector de modo de pantalla
     const char* displayModes[] = { "Ventana", "Pantalla Completa", "Pantalla Completa sin Bordes" };
 
     ImGui::Combo("##displaymode", &selectedDisplayModeIndex, displayModes, IM_ARRAYSIZE(displayModes));
@@ -170,7 +162,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
     ImGui::Separator();
     ImGui::Spacing();
 
-    // Información actual
     ImGui::Text("Resolución: %d x %d", window.getWidth(), window.getHeight());
 
     const char* currentMode = "";
@@ -192,7 +183,6 @@ void UI::renderVideoSettingsPanel(Engine::Window& window)
     ImGui::Separator();
     ImGui::Spacing();
 
-    // Botón para aplicar cambios
     if (ImGui::Button("Aplicar Cambios", ImVec2(195, 30))) {
         if (!resolutions.empty() && selectedResolutionIndex >= 0
             && selectedResolutionIndex < static_cast<int>(resolutions.size())) {

@@ -57,6 +57,33 @@ void Application::init()
     // Configurar OpenGL
     glEnable(GL_DEPTH_TEST);
 
+    // Configurar iluminación
+
+    // Luz direccional (simula el sol)
+    Renderer::DirectionalLight dirLight;
+    dirLight.direction = glm::vec3(-0.3f, -1.0f, -0.5f);
+    dirLight.ambient = glm::vec3(0.12f);
+    dirLight.diffuse = glm::vec3(0.7f);
+    dirLight.specular = glm::vec3(0.9f);
+    lightManager.setDirectionalLight(dirLight);
+
+    // Luz puntual 1 (encima del grid)
+    Renderer::PointLight pointLight1;
+    pointLight1.position = glm::vec3(0.0f, 5.0f, 0.0f);
+    pointLight1.ambient = glm::vec3(0.05f);
+    pointLight1.diffuse = glm::vec3(0.6f, 0.6f, 0.8f);
+    pointLight1.specular = glm::vec3(1.0f);
+    pointLight1.constant = 1.0f;
+    pointLight1.linear = 0.045f;
+    pointLight1.quadratic = 0.0075f;
+    lightManager.addPointLight(pointLight1);
+
+    // Material por defecto para los cubos
+    material.ambient = glm::vec3(1.0f);
+    material.diffuse = glm::vec3(1.0f);
+    material.specular = glm::vec3(0.5f);
+    material.shininess = 32.0f;
+
     std::cout << "\nGrid initialized: " << grid->getWidth() << "x" << grid->getHeight() << std::endl;
     std::cout << "Simulation: Game of Life (Conway)" << std::endl;
     std::cout << "\nControls:" << std::endl;
@@ -119,6 +146,14 @@ void Application::render()
     shader->setMat4("view", glm::value_ptr(view));
     shader->setMat4("projection", glm::value_ptr(projection));
 
+    // Enviar posición de la cámara (necesaria para specular)
+    glm::vec3 camPos = camera->getPosition();
+    shader->setVec3("viewPos", camPos.x, camPos.y, camPos.z);
+
+    // Enviar datos de iluminación y material
+    lightManager.apply(*shader);
+    material.apply(*shader);
+
     // Renderizar grid - un cubo por cada celda
     float spacing = 1.2f;  // Espacio entre cubos
     float gridOffsetX = -(grid->getWidth() * spacing) / 2.0f;
@@ -132,7 +167,7 @@ void Application::render()
             if (state == CellState::ALIVE) {
                 glm::mat4 model = glm::mat4(1.0f);
                 model = glm::translate(model, glm::vec3(gridOffsetX + x * spacing, 0.0f, gridOffsetZ + y * spacing));
-                model = glm::scale(model, glm::vec3(0.5f));  // Cubos más pequeños
+                model = glm::scale(model, glm::vec3(0.5f));
 
                 // Obtener color dinámico basado en vecinos
                 float r, g, b;

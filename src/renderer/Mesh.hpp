@@ -17,10 +17,11 @@ namespace Renderer {
 
 /**
  * @struct Vertex
- * @brief Estructura de un vértice
+ * @brief Estructura de un vértice con posición, normal y color
  */
 struct Vertex {
     glm::vec3 position;
+    glm::vec3 normal;
     glm::vec3 color;
 };
 

@@ -11,6 +11,7 @@
 #include "renderer/Shader.hpp"
 #include "engine/Window.hpp"
 #include "renderer/Camera.hpp"
+#include "renderer/Light.hpp"
 #include "renderer/Mesh.hpp"
 #include "renderer/UI.hpp"
 #include "InputManager.hpp"
@@ -58,11 +59,15 @@ private:
     std::unique_ptr<Renderer::UI> ui;
     std::unique_ptr<InputManager> inputManager;
 
-    // Simulación
-    std::unique_ptr<Grid2D> grid;
-    std::unique_ptr<Simulator> simulator;
-    std::unique_ptr<Stats> stats;
-    std::unique_ptr<Renderer::Mesh> cubeMesh;
+  // Simulación
+  std::unique_ptr<Grid2D> grid;
+  std::unique_ptr<Simulator> simulator;
+  std::unique_ptr<Stats> stats;
+  std::unique_ptr<Renderer::Mesh> cubeMesh;
+
+  // Iluminación
+  Renderer::LightManager lightManager;
+  Renderer::Material material;
 
     // Configuración
     int width, height;

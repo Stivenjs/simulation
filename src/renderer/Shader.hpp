@@ -61,6 +61,13 @@ public:
     GLuint getProgram() const { return program; }
 
     /**
+     * @brief Establece un uniform int
+     * @param name Nombre del uniform
+     * @param value Valor a establecer
+     */
+    void setInt(const std::string& name, int value) const;
+
+    /**
      * @brief Establece un uniform float
      * @param name Nombre del uniform
      * @param value Valor a establecer

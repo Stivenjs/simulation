@@ -42,54 +42,63 @@ void Mesh::setupMesh(const std::vector<Vertex>& vertices, const std::vector<unsi
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
-    // Posición
+    // Posición (location = 0)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Color
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    // Normal (location = 1)
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(1);
+
+    // Color (location = 2)
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, color));
+    glEnableVertexAttribArray(2);
 
     glBindVertexArray(0);
 }
 
 std::unique_ptr<Mesh> Mesh::createCube()
 {
-    std::vector<Vertex> vertices = { // Frontal (rojo)
-                                     { { -0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f } },
-                                     { { 0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f } },
-                                     { { 0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f } },
-                                     { { -0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f } },
+    // Color base blanco - el color real se controla por uniform cellColor
+    glm::vec3 white(1.0f);
 
-                                     // Trasera (verde)
-                                     { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f } },
-                                     { { 0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f } },
-                                     { { 0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f } },
-                                     { { -0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f } },
+    // Cada cara tiene su propia normal para iluminación correcta
+    std::vector<Vertex> vertices = {
+        // Cara frontal (normal +Z)
+        { { -0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }, white },
+        { { 0.5f, -0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }, white },
+        { { 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }, white },
+        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f }, white },
 
-                                     // Superior (azul)
-                                     { { -0.5f, 0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f } },
-                                     { { 0.5f, 0.5f, -0.5f }, { 0.0f, 0.0f, 1.0f } },
-                                     { { 0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f } },
-                                     { { -0.5f, 0.5f, 0.5f }, { 0.0f, 0.0f, 1.0f } },
+        // Cara trasera (normal -Z)
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, -1.0f }, white },
+        { { 0.5f, -0.5f, -0.5f }, { 0.0f, 0.0f, -1.0f }, white },
+        { { 0.5f, 0.5f, -0.5f }, { 0.0f, 0.0f, -1.0f }, white },
+        { { -0.5f, 0.5f, -0.5f }, { 0.0f, 0.0f, -1.0f }, white },
 
-                                     // Inferior (amarillo)
-                                     { { -0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f } },
-                                     { { 0.5f, -0.5f, -0.5f }, { 1.0f, 1.0f, 0.0f } },
-                                     { { 0.5f, -0.5f, 0.5f }, { 1.0f, 1.0f, 0.0f } },
-                                     { { -0.5f, -0.5f, 0.5f }, { 1.0f, 1.0f, 0.0f } },
+        // Cara superior (normal +Y)
+        { { -0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, white },
+        { { 0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f, 0.0f }, white },
+        { { 0.5f, 0.5f, 0.5f }, { 0.0f, 1.0f, 0.0f }, white },
+        { { -0.5f, 0.5f, 0.5f }, { 0.0f, 1.0f, 0.0f }, white },
 
-                                     // Derecha (magenta)
-                                     { { 0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f } },
-                                     { { 0.5f, 0.5f, -0.5f }, { 1.0f, 0.0f, 1.0f } },
-                                     { { 0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f, 1.0f } },
-                                     { { 0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f, 1.0f } },
+        // Cara inferior (normal -Y)
+        { { -0.5f, -0.5f, -0.5f }, { 0.0f, -1.0f, 0.0f }, white },
+        { { 0.5f, -0.5f, -0.5f }, { 0.0f, -1.0f, 0.0f }, white },
+        { { 0.5f, -0.5f, 0.5f }, { 0.0f, -1.0f, 0.0f }, white },
+        { { -0.5f, -0.5f, 0.5f }, { 0.0f, -1.0f, 0.0f }, white },
 
-                                     // Izquierda (cyan)
-                                     { { -0.5f, -0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f } },
-                                     { { -0.5f, 0.5f, -0.5f }, { 0.0f, 1.0f, 1.0f } },
-                                     { { -0.5f, 0.5f, 0.5f }, { 0.0f, 1.0f, 1.0f } },
-                                     { { -0.5f, -0.5f, 0.5f }, { 0.0f, 1.0f, 1.0f } }
+        // Cara derecha (normal +X)
+        { { 0.5f, -0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f }, white },
+        { { 0.5f, 0.5f, -0.5f }, { 1.0f, 0.0f, 0.0f }, white },
+        { { 0.5f, 0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f }, white },
+        { { 0.5f, -0.5f, 0.5f }, { 1.0f, 0.0f, 0.0f }, white },
+
+        // Cara izquierda (normal -X)
+        { { -0.5f, -0.5f, -0.5f }, { -1.0f, 0.0f, 0.0f }, white },
+        { { -0.5f, 0.5f, -0.5f }, { -1.0f, 0.0f, 0.0f }, white },
+        { { -0.5f, 0.5f, 0.5f }, { -1.0f, 0.0f, 0.0f }, white },
+        { { -0.5f, -0.5f, 0.5f }, { -1.0f, 0.0f, 0.0f }, white },
     };
 
     std::vector<unsigned int> indices = {
@@ -98,7 +107,7 @@ std::unique_ptr<Mesh> Mesh::createCube()
         8,  9,  10, 10, 11, 8,   // Superior
         12, 14, 13, 14, 12, 15,  // Inferior
         16, 17, 18, 18, 19, 16,  // Derecha
-        20, 22, 21, 22, 20, 23   // Izquierda
+        20, 22, 21, 22, 20, 23,  // Izquierda
     };
 
     return std::make_unique<Mesh>(vertices, indices);
