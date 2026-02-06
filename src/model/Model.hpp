@@ -88,8 +88,7 @@ private:
      * @param typeName Nombre del tipo como string
      * @return Vector de texturas cargadas
      */
-    std::vector<Texture> loadMaterialTextures(
-        aiMaterial* mat, aiTextureType type, const std::string& typeName);
+    std::vector<Texture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, const std::string& typeName);
 };
 
 }  // namespace Renderer

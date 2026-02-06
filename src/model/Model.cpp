@@ -10,6 +10,7 @@
  */
 
 #include "Model.hpp"
+#include "core/FileFinder.hpp"
 #include "renderer/Shader.hpp"
 #include "renderer/Texture.hpp"
 
@@ -34,7 +35,9 @@ void Model::draw(const Shader& shader) const
 
 void Model::loadModel(const std::string& path)
 {
-    std::cout << "Loading model: " << path << std::endl;
+    // Buscar el archivo usando FileFinder
+    std::string resolvedPath = Core::FileFinder::findFile(path);
+    std::cout << "Loading model: " << resolvedPath << std::endl;
 
     Assimp::Importer importer;
 
@@ -53,10 +56,10 @@ void Model::loadModel(const std::string& path)
         return;
     }
 
-    // Extraer directorio del archivo (compatible Windows y Unix)
-    size_t lastSlash = path.find_last_of("/\\");
+    // Extraer directorio del archivo (para cargar texturas .mtl)
+    size_t lastSlash = resolvedPath.find_last_of("/\\");
     if (lastSlash != std::string::npos)
-        directory = path.substr(0, lastSlash);
+        directory = resolvedPath.substr(0, lastSlash);
     else
         directory = ".";
 

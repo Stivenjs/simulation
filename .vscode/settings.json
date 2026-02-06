@@ -69,11 +69,9 @@
     "**/.git": true,
     "**/build": true,
     "**/*.o": true,
-    "**/*.obj": true
   },
   "search.exclude": {
     "**/build": true,
     "**/*.o": true,
-    "**/*.obj": true
   }
 }

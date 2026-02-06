@@ -65,7 +65,7 @@ private:
     std::unique_ptr<Simulator> simulator;
     std::unique_ptr<Stats> stats;
     std::unique_ptr<Renderer::Mesh> cubeMesh;
-    std::unique_ptr<Renderer::Model> loadedModel;
+    std::vector<std::unique_ptr<Renderer::Model>> loadedModels;
 
     // Iluminación
     Renderer::LightManager lightManager;

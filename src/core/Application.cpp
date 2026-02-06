@@ -5,6 +5,7 @@
 
 #include <GL/glew.h>
 #include "Application.hpp"
+#include "FileFinder.hpp"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -12,6 +13,9 @@
 #include <iostream>
 
 namespace Core {
+
+// Carpeta donde están los modelos 3D (se busca recursivamente)
+static const char* const MODELS_DIRECTORY = "assets/models";
 
 Application::Application(int width, int height, const std::string& title) :
     width(width), height(height), title(title), lastFrame(0.0f), deltaTime(0.0f)
@@ -50,6 +54,32 @@ void Application::init()
 
     // Crear mesh del cubo (reutilizable para cada celda)
     cubeMesh = Renderer::Mesh::createCube();
+
+    // Cargar todos los modelos 3D de la carpeta assets/models/
+    std::cout << "Loading models from: " << MODELS_DIRECTORY << std::endl;
+    std::vector<std::string> modelExtensions = { ".obj", ".fbx", ".gltf", ".glb", ".dae", ".3ds", ".blend" };
+    std::vector<std::string> modelFiles = FileFinder::findFilesInDirectory(MODELS_DIRECTORY, modelExtensions);
+
+    if (modelFiles.empty()) {
+        std::cout << "  No se encontraron modelos en " << MODELS_DIRECTORY << std::endl;
+    } else {
+        std::cout << "  Encontrados " << modelFiles.size() << " archivos de modelo" << std::endl;
+        for (const auto& modelPath : modelFiles) {
+            try {
+                auto model = std::make_unique<Renderer::Model>(modelPath);
+                if (model->getMeshCount() > 0) {
+                    loadedModels.push_back(std::move(model));
+                    std::cout << "    ✓ Cargado: " << modelPath << " (" << loadedModels.back()->getMeshCount()
+                              << " meshes)" << std::endl;
+                } else {
+                    std::cerr << "    ✗ Error: " << modelPath << " no tiene meshes válidos" << std::endl;
+                }
+            } catch (const std::exception& e) {
+                std::cerr << "    ✗ Error cargando " << modelPath << ": " << e.what() << std::endl;
+            }
+        }
+        std::cout << "  Total modelos cargados: " << loadedModels.size() << std::endl;
+    }
 
     // Crear input manager (después de grid y simulator)
     inputManager = std::make_unique<InputManager>(window->getHandle(), *camera, *grid, *simulator);
@@ -180,13 +210,16 @@ void Application::render()
         }
     }
 
-    // Renderizar modelo 3D cargado (si existe)
-    if (loadedModel) {
+    // Renderizar todos los modelos 3D cargados
+    for (size_t i = 0; i < loadedModels.size(); ++i) {
         glm::mat4 modelMat = glm::mat4(1.0f);
-        modelMat = glm::translate(modelMat, glm::vec3(0.0f, 2.0f, 0.0f));
+        // Distribuir modelos en una línea horizontal
+        float offsetX = (static_cast<float>(i) - static_cast<float>(loadedModels.size() - 1) / 2.0f) * 3.0f;
+        modelMat = glm::translate(modelMat, glm::vec3(offsetX, 0.0f, 0.0f));
+        modelMat = glm::scale(modelMat, glm::vec3(0.5f));  // Escala ajustable
         shader->setMat4("model", glm::value_ptr(modelMat));
         shader->setVec3("cellColor", 1.0f, 1.0f, 1.0f);
-        loadedModel->draw(*shader);
+        loadedModels[i]->draw(*shader);
     }
 
     shader->unuse();
