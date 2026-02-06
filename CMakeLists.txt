@@ -15,19 +15,25 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 # Exportar compile_commands.json para Clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Usar pkg-config para encontrar librerías (funciona en MSYS2, Linux, macOS)
 find_package(PkgConfig REQUIRED)
 
-# Buscar OpenGL
+# OpenGL
 find_package(OpenGL REQUIRED)
 
-# Buscar GLFW usando pkg-config
+# GLFW
 pkg_check_modules(GLFW REQUIRED glfw3)
 
-# Buscar GLEW usando pkg-config
+# GLEW
 pkg_check_modules(GLEW REQUIRED glew)
 
-# Descargar ImGui con FetchContent
+# Assimp - Carga de modelos 3D
+# Instalar con:
+#   MSYS2:  pacman -S mingw-w64-ucrt-x86_64-assimp
+#   Ubuntu: sudo apt install libassimp-dev
+#   macOS:  brew install assimp
+pkg_check_modules(ASSIMP REQUIRED assimp)
+
+# Dear ImGui - Interfaz de usuario
 FetchContent_Declare(
     imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
@@ -36,7 +42,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(imgui)
 
-# Archivos de ImGui que se necesitan
+# stb - Carga de imágenes (single-header)
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(stb)
+
 set(IMGUI_DIR ${imgui_SOURCE_DIR})
 set(IMGUI_SOURCES
     ${IMGUI_DIR}/imgui.cpp
@@ -47,26 +61,24 @@ set(IMGUI_SOURCES
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
 )
 
-# GLM es solo headers, no necesita linking
-set(GLM_INCLUDE_DIR "")
-
-# Incluir directorios
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${OPENGL_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
+    ${ASSIMP_INCLUDE_DIRS}
     ${IMGUI_DIR}
     ${IMGUI_DIR}/backends
+    ${stb_SOURCE_DIR}
 )
 
-# Directorios de librerías
 link_directories(
     ${GLFW_LIBRARY_DIRS}
     ${GLEW_LIBRARY_DIRS}
+    ${ASSIMP_LIBRARY_DIRS}
 )
 
-# Recopilar automáticamente todos los archivos .cpp del proyecto
+# Recopilar automáticamente todos los archivos .cpp
 file(GLOB_RECURSE SOURCES
     "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
@@ -74,37 +86,32 @@ file(GLOB_RECURSE SOURCES
 # Agregar archivos de ImGui
 list(APPEND SOURCES ${IMGUI_SOURCES})
 
-# Ejecutable principal
 add_executable(simulation ${SOURCES})
 
-# Linkear librerías
 target_link_libraries(simulation
     ${GLFW_LIBRARIES}
     ${GLEW_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
 )
 
-# Flags de compilación específicos
 target_compile_options(simulation PRIVATE
     ${GLFW_CFLAGS_OTHER}
     ${GLEW_CFLAGS_OTHER}
+    ${ASSIMP_CFLAGS_OTHER}
 )
 
-# Configuración específica por plataforma
 if(WIN32)
-    # Windows: Librerías del sistema necesarias
     target_link_libraries(simulation
         opengl32
         gdi32
     )
 elseif(UNIX AND NOT APPLE)
-    # Linux: Linkear X11 y otras dependencias
     target_link_libraries(simulation
         X11
         pthread
         dl
     )
 elseif(APPLE)
-    # macOS: Frameworks necesarios
     target_link_libraries(simulation
         "-framework Cocoa"
         "-framework IOKit"

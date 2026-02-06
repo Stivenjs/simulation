@@ -175,9 +175,18 @@ void Application::render()
 
                 shader->setMat4("model", glm::value_ptr(model));
                 shader->setVec3("cellColor", r, g, b);
-                cubeMesh->draw();
+                cubeMesh->draw(*shader);
             }
         }
+    }
+
+    // Renderizar modelo 3D cargado (si existe)
+    if (loadedModel) {
+        glm::mat4 modelMat = glm::mat4(1.0f);
+        modelMat = glm::translate(modelMat, glm::vec3(0.0f, 2.0f, 0.0f));
+        shader->setMat4("model", glm::value_ptr(modelMat));
+        shader->setVec3("cellColor", 1.0f, 1.0f, 1.0f);
+        loadedModel->draw(*shader);
     }
 
     shader->unuse();

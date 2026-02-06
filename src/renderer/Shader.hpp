@@ -61,6 +61,13 @@ public:
     GLuint getProgram() const { return program; }
 
     /**
+     * @brief Establece un uniform bool
+     * @param name Nombre del uniform
+     * @param value Valor a establecer
+     */
+    void setBool(const std::string& name, bool value) const;
+
+    /**
      * @brief Establece un uniform int
      * @param name Nombre del uniform
      * @param value Valor a establecer
@@ -92,6 +99,13 @@ public:
 
 private:
     GLuint program;
+
+    /**
+     * @brief Busca un archivo en múltiples ubicaciones posibles
+     * @param filepath Ruta relativa al archivo (ej: "shaders/basic.vert")
+     * @return Ruta completa al archivo encontrado, o filepath si no se encuentra
+     */
+    static std::string findFile(const std::string& filepath);
 
     /**
      * @brief Lee el contenido de un archivo

@@ -31,6 +31,7 @@ struct Material {
 // Entrada desde vertex shader
 in vec3 FragPos;
 in vec3 Normal;
+in vec2 TexCoords;
 in vec3 vertexColor;
 
 // Uniforms
@@ -39,6 +40,11 @@ uniform PointLight pointLights[MAX_POINT_LIGHTS];
 uniform int numPointLights;
 uniform Material material;
 uniform vec3 viewPos;
+
+// Texturas (usadas solo cuando useTexture = true)
+uniform bool useTexture;
+uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_specular1;
 
 // Salida final
 out vec4 FragColor;
@@ -60,8 +66,15 @@ void main() {
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
     }
 
-    // Aplicar color del vértice/celda
-    result *= vertexColor;
+    // === Fase 3: Aplicar color ===
+    if (useTexture) {
+        // Usar textura diffuse como color base
+        vec4 texColor = texture(texture_diffuse1, TexCoords);
+        result *= texColor.rgb;
+    } else {
+        // Usar color del vértice/celda (comportamiento original)
+        result *= vertexColor;
+    }
 
     FragColor = vec4(result, 1.0);
 }

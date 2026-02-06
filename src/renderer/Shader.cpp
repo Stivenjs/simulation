@@ -10,6 +10,15 @@
 #include <sstream>
 #include <stdexcept>
 #include <vector>
+#include <filesystem>
+#include <algorithm>
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <unistd.h>
+#include <limits.h>
+#endif
 
 namespace Renderer {
 
@@ -29,19 +38,104 @@ Shader::Shader(const std::string& vertexSource, const std::string& fragmentSourc
 
 std::unique_ptr<Shader> Shader::fromFiles(const std::string& vertexPath, const std::string& fragmentPath)
 {
+    // Buscar archivos en múltiples ubicaciones
+    std::string vertexFile = findFile(vertexPath);
+    std::string fragmentFile = findFile(fragmentPath);
+
     // Leer archivos
-    std::string vertexSource = readFile(vertexPath);
-    std::string fragmentSource = readFile(fragmentPath);
+    std::string vertexSource = readFile(vertexFile);
+    std::string fragmentSource = readFile(fragmentFile);
 
     // Crear y devolver unique_ptr al shader
     return std::make_unique<Shader>(vertexSource, fragmentSource);
+}
+
+std::string Shader::findFile(const std::string& filepath)
+{
+    namespace fs = std::filesystem;
+
+    // Lista de ubicaciones donde buscar
+    std::vector<std::string> searchPaths;
+
+    // 1. Ruta exacta proporcionada
+    searchPaths.push_back(filepath);
+
+    // 2. Directorio actual de trabajo
+    try {
+        std::string currentDir = fs::current_path().string();
+        // Normalizar separadores de ruta para Windows
+        std::replace(currentDir.begin(), currentDir.end(), '\\', '/');
+        searchPaths.push_back(currentDir + "/" + filepath);
+    } catch (...) {
+        // Ignorar errores al obtener directorio actual
+    }
+
+    // 3. Obtener directorio del ejecutable
+    std::string exeDir;
+#ifdef _WIN32
+    char exePath[MAX_PATH];
+    DWORD result = GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+    if (result > 0 && result < MAX_PATH) {
+        fs::path exePathObj(exePath);
+        exeDir = exePathObj.parent_path().string();
+        // Normalizar separadores
+        std::replace(exeDir.begin(), exeDir.end(), '\\', '/');
+    }
+#else
+    char exePath[PATH_MAX];
+    ssize_t count = readlink("/proc/self/exe", exePath, PATH_MAX);
+    if (count != -1 && count < PATH_MAX) {
+        exePath[count] = '\0';
+        exeDir = fs::path(exePath).parent_path().string();
+    }
+#endif
+
+    if (!exeDir.empty()) {
+        // 4. Directorio del ejecutable + ruta relativa
+        searchPaths.push_back(exeDir + "/" + filepath);
+
+        // 5. Directorio del ejecutable + ../shaders/...
+        if (filepath.find("shaders/") == 0 || filepath.find("shaders\\") == 0) {
+            searchPaths.push_back(exeDir + "/../" + filepath);
+            searchPaths.push_back(exeDir + "/../../" + filepath);
+        } else {
+            std::string filename = fs::path(filepath).filename().string();
+            searchPaths.push_back(exeDir + "/../shaders/" + filename);
+            searchPaths.push_back(exeDir + "/../../shaders/" + filename);
+        }
+    }
+
+    // Buscar el primer archivo que exista
+    for (const auto& path : searchPaths) {
+        try {
+            // Intentar con separadores normales
+            if (fs::exists(path) && fs::is_regular_file(path)) {
+                return path;
+            }
+            // Intentar con separadores de Windows si estamos en Windows
+#ifdef _WIN32
+            std::string winPath = path;
+            std::replace(winPath.begin(), winPath.end(), '/', '\\');
+            if (fs::exists(winPath) && fs::is_regular_file(winPath)) {
+                return winPath;
+            }
+#endif
+        } catch (...) {
+            // Continuar buscando en otras ubicaciones
+            continue;
+        }
+    }
+
+    // Si no se encuentra, devolver la ruta original (fallará con mensaje de error claro)
+    return filepath;
 }
 
 std::string Shader::readFile(const std::string& filepath)
 {
     std::ifstream file(filepath);
     if (!file.is_open()) {
-        throw std::runtime_error("Failed to open shader file: " + filepath);
+        throw std::runtime_error("Failed to open shader file: " + filepath
+                                 + "\nMake sure the shaders directory exists relative to the executable.");
     }
 
     std::stringstream buffer;
@@ -109,6 +203,12 @@ void Shader::checkCompileErrors(GLuint shader, const std::string& type)
             std::cerr << "ERROR::PROGRAM_LINKING_ERROR\n" << infoLog.data() << std::endl;
         }
     }
+}
+
+void Shader::setBool(const std::string& name, bool value) const
+{
+    GLint location = glGetUniformLocation(program, name.c_str());
+    glUniform1i(location, static_cast<int>(value));
 }
 
 void Shader::setInt(const std::string& name, int value) const
