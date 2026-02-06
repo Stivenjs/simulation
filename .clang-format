@@ -1,0 +1,68 @@
+BasedOnStyle: WebKit
+
+# Indentación
+IndentWidth: 4
+ColumnLimit: 120
+UseTab: Never
+AccessModifierOffset: -4
+
+# Punteros y referencias
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# Llaves
+BreakBeforeBraces: WebKit
+
+# Constructor initialization lists (comas al final, más legible)
+BreakConstructorInitializers: AfterColon
+ConstructorInitializerIndentWidth: 4
+AllowAllConstructorInitializersOnNextLine: true
+
+SortIncludes: Never
+IncludeBlocks: Preserve
+IncludeCategories:
+  - Regex: '^<GL/glew\.h>'
+    Priority: 0
+  # Headers locales del proyecto
+  - Regex: '^".*'
+    Priority: 1
+  # Headers de librerías externas (GLFW, ImGui, GLM, etc.)
+  - Regex: "^<(GLFW|imgui|glm)/"
+    Priority: 2
+  - Regex: "^<GL/"
+    Priority: 3
+  # Headers estándar de C++
+  - Regex: "^<[a-z_]+>"
+    Priority: 4
+  # Headers de C
+  - Regex: '^<.*\.h>'
+    Priority: 5
+
+# Espaciado
+SpaceBeforeParens: ControlStatements
+SpacesInAngles: Never
+SpaceAfterCStyleCast: false
+
+# Alineación
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignTrailingComments: true
+AlignConsecutiveMacros: Consecutive
+
+# Funciones cortas
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
+
+# Comentarios
+ReflowComments: true
+SpacesBeforeTrailingComments: 2
+
+# Namespace
+CompactNamespaces: false
+FixNamespaceComments: true
+
+# Varios
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false

@@ -7,18 +7,38 @@
     "--background-index",
     "--clang-tidy",
     "--completion-style=detailed",
-    "--header-insertion=iwyu",
+    "--header-insertion=never",
     "--pch-storage=memory"
   ],
   "clangd.fallbackFlags": ["-std=c++20"],
 
   "editor.formatOnSave": true,
   "editor.formatOnType": false,
+
   "[cpp]": {
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.tabSize": 4
   },
   "[c]": {
-    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.tabSize": 4
+  },
+  "[cmake]": {
+    "editor.tabSize": 2
+  },
+  "[h]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.tabSize": 4
+  },
+  "[hpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+    "editor.tabSize": 4
+  },
+  "[glsl]": {
+    "editor.tabSize": 4
+  },
+  "[json]": {
+    "editor.tabSize": 2
   },
 
   "cmake.configureOnOpen": true,
@@ -30,10 +50,14 @@
     "*.hpp": "cpp",
     "*.cpp": "cpp",
     "*.tpp": "cpp",
-    "*.ipp": "cpp"
+    "*.ipp": "cpp",
+    "*.vert": "glsl",
+    "*.frag": "glsl",
+    "*.geom": "glsl",
+    "*.comp": "glsl"
   },
 
-  "editor.tabSize": 2,
+  "editor.tabSize": 4,
   "editor.insertSpaces": true,
   "editor.wordWrap": "off",
   "editor.minimap.enabled": true,
@@ -45,11 +69,9 @@
     "**/.git": true,
     "**/build": true,
     "**/*.o": true,
-    "**/*.obj": true
   },
   "search.exclude": {
     "**/build": true,
     "**/*.o": true,
-    "**/*.obj": true
   }
 }

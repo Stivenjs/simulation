@@ -4,6 +4,7 @@ cmake-build-*/
 out/
 .cmake/
 .cache/
+_deps/
 
 # Compiled files
 *.o

@@ -1,0 +1,36 @@
+# EditorConfig es un estándar para mantener estilos consistentes entre editores
+# https://EditorConfig.org
+root = true
+
+# Configuración por defecto para todos los archivos
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Archivos C/C++
+[*.{c,h,cpp,hpp,cc,cxx}]
+indent_style = space
+indent_size = 4
+max_line_length = 120
+
+# Archivos CMake
+[{CMakeLists.txt,*.cmake}]
+indent_style = space
+indent_size = 2
+
+# Archivos GLSL (shaders)
+[*.{vert,frag,geom,comp,tesc,tese}]
+indent_style = space
+indent_size = 4
+
+# Archivos de configuración (JSON, YAML, TOML)
+[*.{json,yaml,yml,toml}]
+indent_style = space
+indent_size = 2
+
+# Archivos Markdown
+[*.md]
+max_line_length = 80
+trim_trailing_whitespace = false

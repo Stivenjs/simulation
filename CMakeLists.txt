@@ -6,80 +6,112 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# FetchContent para descargar dependencias automáticamente
+include(FetchContent)
+
 # Flags de compilación estrictos
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic")
 
 # Exportar compile_commands.json para Clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Usar pkg-config para encontrar librerías (funciona en MSYS2, Linux, macOS)
 find_package(PkgConfig REQUIRED)
 
-# Buscar OpenGL
+# OpenGL
 find_package(OpenGL REQUIRED)
 
-# Buscar GLFW usando pkg-config
+# GLFW
 pkg_check_modules(GLFW REQUIRED glfw3)
 
-# Buscar GLEW usando pkg-config
+# GLEW
 pkg_check_modules(GLEW REQUIRED glew)
 
-# GLM es solo headers, no necesita linking
-set(GLM_INCLUDE_DIR "")
+# Assimp - Carga de modelos 3D
+# Instalar con:
+#   MSYS2:  pacman -S mingw-w64-ucrt-x86_64-assimp
+#   Ubuntu: sudo apt install libassimp-dev
+#   macOS:  brew install assimp
+pkg_check_modules(ASSIMP REQUIRED assimp)
 
-# Incluir directorios
+# Dear ImGui - Interfaz de usuario
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.92.0
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+# stb - Carga de imágenes (single-header)
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(stb)
+
+set(IMGUI_DIR ${imgui_SOURCE_DIR})
+set(IMGUI_SOURCES
+    ${IMGUI_DIR}/imgui.cpp
+    ${IMGUI_DIR}/imgui_draw.cpp
+    ${IMGUI_DIR}/imgui_tables.cpp
+    ${IMGUI_DIR}/imgui_widgets.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp
+    ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp
+)
+
 include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${OPENGL_INCLUDE_DIRS}
     ${GLFW_INCLUDE_DIRS}
     ${GLEW_INCLUDE_DIRS}
+    ${ASSIMP_INCLUDE_DIRS}
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends
+    ${stb_SOURCE_DIR}
 )
 
-# Directorios de librerías
 link_directories(
     ${GLFW_LIBRARY_DIRS}
     ${GLEW_LIBRARY_DIRS}
+    ${ASSIMP_LIBRARY_DIRS}
 )
 
-# Archivos fuente
-set(SOURCES
-    src/main.cpp
-    src/engine/Window.cpp
-    src/renderer/Shader.cpp
+# Recopilar automáticamente todos los archivos .cpp
+file(GLOB_RECURSE SOURCES
+    "${CMAKE_SOURCE_DIR}/src/*.cpp"
 )
 
-# Ejecutable principal
+# Agregar archivos de ImGui
+list(APPEND SOURCES ${IMGUI_SOURCES})
+
 add_executable(simulation ${SOURCES})
 
-# Linkear librerías
 target_link_libraries(simulation
-    ${OPENGL_LIBRARIES}
     ${GLFW_LIBRARIES}
     ${GLEW_LIBRARIES}
+    ${ASSIMP_LIBRARIES}
 )
 
-# Flags de compilación específicos
 target_compile_options(simulation PRIVATE
     ${GLFW_CFLAGS_OTHER}
     ${GLEW_CFLAGS_OTHER}
+    ${ASSIMP_CFLAGS_OTHER}
 )
 
-# Configuración específica por plataforma
 if(WIN32)
-    # Windows: Agregar librerías del sistema
     target_link_libraries(simulation
         opengl32
         gdi32
     )
 elseif(UNIX AND NOT APPLE)
-    # Linux: Linkear X11 y otras dependencias
     target_link_libraries(simulation
         X11
         pthread
         dl
     )
 elseif(APPLE)
-    # macOS: Frameworks necesarios
     target_link_libraries(simulation
         "-framework Cocoa"
         "-framework IOKit"

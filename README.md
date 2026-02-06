@@ -70,6 +70,8 @@ cmake --build build
 
   # Fedora
   sudo dnf install glfw-devel glew-devel glm-devel
+
+  # Nota: ImGui se descarga automáticamente con CMake FetchContent
   ```
 
 #### macOS
